@@ -1,16 +1,14 @@
 from django.shortcuts import render, redirect
+from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
 class Post_make(APIView): # 예약 게시판 만들기
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request):
-        if request.user.nickname == '':
-            return redirect('main:Main_check')
-        day = datetime.now()
-        min_day = str(day.date())
-        return Response(status=status.HTTP_200_OK, template_name='main/write.html', data={'min_day': min_day})
+        return Response(status=status.HTTP_200_OK, template_name='main/post_write.html')
 
     def post(self, request):
         form = Post_check(data=request.data, context={'request': request})

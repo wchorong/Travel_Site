@@ -1,6 +1,15 @@
 from django.db import models
 
-class Categories(models.Model): # 카테고리
+class User(models.Model):
+    create_date = models.DateTimeField(auto_now_add=True)
+    nickname = models.CharField(unique=True) # 닉네임
+    region = models.CharField(max_length=50, blank=True)  # 지역
+    priority_first = models.IntegerField(blank=True)
+    priority_second = models.IntegerField(blank=True)
+    def __str__(self):
+        return self.nickname
+
+class User_Categories(models.Model): # 카테고리
     AMBIENCE = (
         ('1', '신선한'),
         ('2', '조용한'),
@@ -28,13 +37,4 @@ class Categories(models.Model): # 카테고리
         ('2', '오리발'),
         ('2', '매트'),)
     rental_item = models.CharField(verbose_name='대여 물품', max_length=1, choices=RENTAL_ITEM, blank=True)
-
-class User(models.Model):
-    create_date = models.DateTimeField(auto_now_add=True)
-    nickname = models.CharField(unique=True) # 닉네임
-    region = models.CharField(max_length=50, blank=True)  # 지역
-    user_categories = models.ManyToManyField(Categories, blank=True, related_name="user_categories")
-    priority_first = models.IntegerField(blank=True)
-    priority_second = models.IntegerField(blank=True)
-    def __str__(self):
-        return self.nickname
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

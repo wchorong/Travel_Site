@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializer import User_Serializer
 
-class user_name(APIView):
+class user_name(APIView): #유저 만들기
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request):
@@ -15,7 +15,7 @@ class user_name(APIView):
         form = User_Serializer(data=request.data)
         if form.is_valid():
             form.save()
-            return redirect('summer_spot:main_page')
+            return redirect('main:main_page')
         else:
             return Response(status=status.HTTP_200_OK, template_name='user_name/name_make.html')
 
