@@ -4,8 +4,20 @@ class User(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     nickname = models.CharField(unique=True) # 닉네임
     region = models.CharField(max_length=50, blank=True)  # 지역
-    priority_first = models.IntegerField(blank=True)
-    priority_second = models.IntegerField(blank=True)
+    PRIORITY_FIRST = (
+        ('1', '분위기'),
+        ('2', '인원'),
+        ('3', '풍경'),
+        ('4', '놀거리'),
+        ('5', '대여 물품'),)
+    priority_first = models.CharField(verbose_name='첫번째 우선순위', max_length=1, choices=PRIORITY_FIRST, blank=True)
+    PRIORITY_SECOND = (
+        ('1', '분위기'),
+        ('2', '인원'),
+        ('3', '풍경'),
+        ('4', '놀거리'),
+        ('5', '대여 물품'),)
+    priority_second = models.CharField(verbose_name='두번째 우선순위', max_length=1, choices=PRIORITY_SECOND, blank=True)
     def __str__(self):
         return self.nickname
 

@@ -38,4 +38,4 @@ class Post_Categories(models.Model):  # 게시글 카테고리
         ('2', '오리발'),
         ('2', '매트'),)
     rental_item = models.CharField(verbose_name='대여 물품', max_length=1, choices=RENTAL_ITEM, blank=True)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True)
