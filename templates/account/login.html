@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+<form method=POST action="{% url 'user_set:login' %}">
+    {% csrf_token %}
+    <label for="nickname"><p class="text-muted" style="margin: 0px; color: paleturquoise !important;">닉네임</p></label>
+            <input type="text" class="form-control" name="nickname" id="nickname"
+                   value="{{ nickname|default_if_none:'' }}">
+    <button type="submit" class="btn btn-primary" style="color: black">login</button>
+</form>
+</body>
+</html>

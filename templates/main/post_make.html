@@ -1,0 +1,16 @@
+{% load rest_framework %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+<form method=POST action="{% url 'summer_spot:post_make' %}">
+    {% csrf_token %}
+    {% render_form post template_pack='rest_framework/vertical' %}
+    <button type="submit" class="btn btn-primary" style="color: black">MAKE</button>
+</form>
+</body>
+</html>

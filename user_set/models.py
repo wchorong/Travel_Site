@@ -2,22 +2,8 @@ from django.db import models
 
 class User(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
-    nickname = models.CharField(unique=True) # 닉네임
-    region = models.CharField(max_length=50, blank=True)  # 지역
-    PRIORITY_FIRST = (
-        ('1', '분위기'),
-        ('2', '인원'),
-        ('3', '풍경'),
-        ('4', '놀거리'),
-        ('5', '대여 물품'),)
-    priority_first = models.CharField(verbose_name='첫번째 우선순위', max_length=1, choices=PRIORITY_FIRST, blank=True)
-    PRIORITY_SECOND = (
-        ('1', '분위기'),
-        ('2', '인원'),
-        ('3', '풍경'),
-        ('4', '놀거리'),
-        ('5', '대여 물품'),)
-    priority_second = models.CharField(verbose_name='두번째 우선순위', max_length=1, choices=PRIORITY_SECOND, blank=True)
+    nickname = models.CharField(unique=True, max_length=50, verbose_name="닉네임") # 닉네임
+    region = models.CharField(max_length=50, blank=True, verbose_name="희망 지역(시로 입력해 주세요)")  # 지역
     def __str__(self):
         return self.nickname
 
@@ -26,7 +12,7 @@ class User_Categories(models.Model): # 카테고리
         ('1', '신선한'),
         ('2', '조용한'),
         ('3', '왁자지껄한'),)
-    ambience = models.CharField(verbose_name='분위기', max_length=1, choices=AMBIENCE, blank=True)
+    ambience = models.CharField(verbose_name='분위기', max_length=1, choices=AMBIENCE, blank=True,)
     PERSONNEL = (
         ('1', '혼자'),
         ('2', '둘이'),

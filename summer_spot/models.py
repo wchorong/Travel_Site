@@ -1,16 +1,14 @@
 from django.db import models
-from user_set.models import User, Categories
+from user_set.models import User, User_Categories
 
 
 # Create your models here.
 class Post(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     region = models.CharField(max_length=50, blank=True)  # 지역
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='appname', null=True)
-
-
-class Post_Categories(models.Model):  # 게시글 카테고리
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    image = models.ImageField(upload_to='appname', null=True, blank=True)
+    user_check = models.IntegerField(default=0)
     AMBIENCE = (
         ('1', '신선한'),
         ('2', '조용한'),
@@ -38,4 +36,6 @@ class Post_Categories(models.Model):  # 게시글 카테고리
         ('2', '오리발'),
         ('2', '매트'),)
     rental_item = models.CharField(verbose_name='대여 물품', max_length=1, choices=RENTAL_ITEM, blank=True)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True)
+
+
+
