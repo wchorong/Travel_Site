@@ -1,19 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-
 {% for post in post %}
     {% for post in post %}
-    <h1 >{{ post.id }}</h1>
-    <h3 >{{ post.region }}</h3>
-    <h3 >{{ post.post }}</h3>
-    <h3 >{{ post.ambience}}-{{ post.personnel}}-{{ post.view}}-{{ post.good_place}}-{{ post.rental_item}}</h3>
+        <div class="out_centered">
+        <a class="link_text" href="{% url 'summer_spot:post' post.id %}">
+        <div class="container main_post" style="padding: 8px">
+
+               <div style="margin-right: 50px"><img src="{{ post.title_image.url }}" style=" width: 350px; height: 250px"></img>
+               </div>
+
+    <div style="width: 480px; height: 250px;">
+        <div style="margin-bottom: 50px; margin-top: 10px"><h2>{{ post.region}}</h2></div>
+        <div style="margin-bottom: 50px;">
+        <h3>{{ post.get_ambience_display}} / {{ post.get_personnel_display}} /
+         {{ post.get_view_display}} / {{ post.get_good_place_display}} /
+        {{ post.get_rental_item_display}}</h3>
+            </div>
+        <div style="padding-top: 50px">
+        <h3>조회수 {{ post.user_check}}</h3>
+            </div>
+    </div>
+        </div>
+        </a>
+        </div>
 {% endfor %}
 {% endfor %}
-<button><a href={% url 'summer_spot:post_make' %}>post make</a></button>
+<div class="out_centered" style="margin-top: 50px">
+<button class="custom-btn btn-6"  onclick="location.href='{% url 'summer_spot:post_make' %}'">
+    <span>Make Post</span></button>
+</div>
 </body>
+{% endblock %}
 </html>

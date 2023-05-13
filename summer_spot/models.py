@@ -1,14 +1,28 @@
 from django.db import models
 from user_set.models import User, User_Categories
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
-# Create your models here.
+class Review(models.Model):
+    comment = models.CharField(max_length=100, blank=True)
+    like = models.IntegerField(validators=[MinValueValidator(0),
+                                       MaxValueValidator(5)], default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+
+class Many_image(models.Model):
+    images = models.ImageField(upload_to='post')
+    images_name = models.CharField(max_length=10, blank=True)
+
 class Post(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     region = models.CharField(max_length=50, blank=True)  # 지역
+    place = models.CharField(max_length=50, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
-    image = models.ImageField(upload_to='appname', null=True, blank=True)
+    title_image = models.ImageField(upload_to='title', null=True, blank=True)
     user_check = models.IntegerField(default=0)
+    post_review = models.ManyToManyField(Review, blank=True, related_name="post_review")
+    post_image = models.ManyToManyField(Many_image, blank=True, related_name="post_image")
     AMBIENCE = (
         ('1', '신선한'),
         ('2', '조용한'),
@@ -36,6 +50,4 @@ class Post(models.Model):
         ('2', '오리발'),
         ('2', '매트'),)
     rental_item = models.CharField(verbose_name='대여 물품', max_length=1, choices=RENTAL_ITEM, blank=True)
-
-
 

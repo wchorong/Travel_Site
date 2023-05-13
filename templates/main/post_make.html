@@ -1,5 +1,7 @@
-{% load rest_framework %}
 <!DOCTYPE html>
+{% load static %}
+{% load rest_framework %}
+{% block content %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,10 +9,24 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 <body>
-<form method=POST action="{% url 'summer_spot:post_make' %}">
+<form method=POST action="{% url 'summer_spot:post_make' %}" enctype="multipart/form-data">
     {% csrf_token %}
-    {% render_form post template_pack='rest_framework/vertical' %}
+    <div class="mb-3">
+            <label for="place"><p class="text-muted" style="margin: 0px; color: paleturquoise !important;">장소</p></label>
+            <input type="text" class="form-control" name="place" id="place"
+                   value="{{ post.place.value|default_if_none:'' }}">
+        </div>
+    <div id="map" style="width:250px;height:250px; display: none;"></div>
+    <div class="mb-3">
+            <label for="title_image"><p class="text-muted" style="margin: 0px; color: paleturquoise !important;">이미지 첨부</p></label>
+            <input type="file" class="form-control" name="title_image" id="title_image">
+        </div>
+    {% render_form post_cat template_pack='rest_framework/vertical' %}
     <button type="submit" class="btn btn-primary" style="color: black">MAKE</button>
 </form>
+<script  type="text/javascript" src="{% static '/js/map.js' %}"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	fe7ad61fd61d620b72278f6765994dc2&libraries=services"></script>
 </body>
+{% endblock %}
 </html>

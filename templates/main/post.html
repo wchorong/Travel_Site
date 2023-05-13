@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<html lang="ko">
+<head>
+    <title>Post</title>
+    <script>
+      var start = "{{ post.place }}";
+    </script>
+</head>
+<body>
+<link href="/css/star.css" rel="stylesheet"/>
+<div style="text-align: center; margin-bottom: 20px">
+    <div class="slider-container">
+    <div class="slider" style="width: 1000px">
+        {% for image in post.post_image.all %}
+      <div class="slide"><img src="{{ image.images.url }}" style="border-radius: 15px;width: 600px; height: 400px"></div>
+        {% endfor %}
+    </div>
+  </div>
+
+  <div class="slider-nav">
+    <button id="prev-btn">Previous</button>
+    <button id="next-btn">Next</button>
+  </div>
+
+    <h3 >{{ post.get_ambience_display}} / {{ post.get_personnel_display}} /
+         {{ post.get_view_display}} / {{ post.get_good_place_display}} /
+        {{ post.get_rental_item_display}}</h3>
+</div>
+<div class="out_centered" style="margin-top: 10px">
+<button class="custom-btn btn-6" id="open-modal-btn">
+    <span>Make Post</span></button>
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>사진을 넣어주세요</h2>
+        <form method=POST action="{% url 'summer_spot:many_image' pk %}" enctype="multipart/form-data">
+    {% csrf_token %}
+        <div class="mb-3">
+            <label for="images"><p class="text-muted" style="margin: 0px; color: paleturquoise !important;">이미지 첨부</p></label>
+            <input type="file" class="form-control" name="images" id="images">
+        </div>
+            <div class="mb-3">
+            <label for="images_name"><p class="text-muted" style="margin: 0px; color: paleturquoise !important;">이미지 제목</p></label>
+            <input type="text" class="form-control" name="images_name" id="images_name">
+        </div>
+            <button type="submit" class="btn btn-primary" style="color: black">MAKE</button>
+        </form>
+    </div>
+  </div>
+</div>
+<div class="out_centered">
+        <div class="container" style="padding: 8px">
+
+               <div style="padding-left: 150px"><div id='maps' style="width: 400px; height: 400px"></div>
+               </div>
+
+    <div style="width: 400px; height: 250px;padding-left: 100px">
+        <div style="margin-bottom: 50px; margin-top: 10px"><h2>{{ post.region}}</h2></div>
+        <div style="margin-bottom: 50px;">
+        <h3>{{ post.place}}</h3>
+            </div>
+        <div style="padding-top: 50px">
+            </div>
+    </div>
+        </div>
+        </div>
+{% for post_review in post.post_review.all %}
+<div class="out_centered" style="border-bottom:1px black solid; border-top:1px black solid">
+        <div class="container" style="width: 800px;
+        justify-content: left; height: 150px">
+
+               <div><div>
+               <h2>{{ post_review.user}}</h2>
+                <h2>{{ post_review.like}}</h2></div>
+               </div>
+
+    <div style="padding-left: 100px">
+        <div><h2><h3>{{ post_review.comment}}</h3></h2></div>
+    </div>
+        </div>
+        </div>
+{% endfor %}
+<form method=POST  name="review_form" id="review_form" action="{% url 'summer_spot:review_make' pk%}" enctype="multipart/form-data">
+    {% csrf_token %}
+<fieldset>
+		<span class="text-bold">별점을 선택해주세요</span>
+		<input type="radio" name="like" value="5" id="rate1"><label
+			for="rate1">★</label>
+		<input type="radio" name="like" value="4" id="rate2"><label
+			for="rate2">★</label>
+		<input type="radio" name="like" value="3" id="rate3"><label
+			for="rate3">★</label>
+		<input type="radio" name="like" value="2" id="rate4"><label
+			for="rate4">★</label>
+		<input type="radio" name="like" value="1" id="rate5"><label
+			for="rate5">★</label>
+	</fieldset>
+    <div>
+		<textarea class="col-auto form-control" type="text" id="reviewContents" name="comment"
+				  placeholder="리뷰를 작성해 주세요"></textarea>
+	</div>
+    <button type="submit" class="btn btn-primary" style="color: black">확인</button>
+</form>
+</body>
+{% endblock %}
+</html>
