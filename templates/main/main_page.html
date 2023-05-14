@@ -8,24 +8,28 @@
     <title>Title</title>
 </head>
 <body>
+{% include "filter_bar.html" %}
+<div id="result"></div>
 {% for post in post %}
     {% for post in post %}
         <div class="out_centered">
         <a class="link_text" href="{% url 'summer_spot:post' post.id %}">
         <div class="container main_post" style="padding: 8px">
 
-               <div style="margin-right: 50px"><img src="{{ post.title_image.url }}" style=" width: 350px; height: 250px"></img>
+               <div style="margin-right: 50px"><img src="{{ post.title_image.url }}" style="border-radius: 15px; width: 350px; height: 250px"></img>
                </div>
 
     <div style="width: 480px; height: 250px;">
-        <div style="margin-bottom: 50px; margin-top: 10px"><h2>{{ post.region}}</h2></div>
-        <div style="margin-bottom: 50px;">
-        <h3>{{ post.get_ambience_display}} / {{ post.get_personnel_display}} /
-         {{ post.get_view_display}} / {{ post.get_good_place_display}} /
-        {{ post.get_rental_item_display}}</h3>
+        <div style="margin-bottom: 50px; margin-top: 10px"><h2>{{ post.title}}</h2></div>
+        <div style="margin-bottom: 50px; display: flex">
+        <h4 style="border-radius: 5px">{{ post.get_ambience_display}}</h4>
+            <h4 style="border-radius: 5px; margin-left: 10px">{{ post.get_personnel_display}}</h4>
+            <h4 style="border-radius: 5px; margin-left: 10px">{{ post.get_view_display}}</h4>
+            <h4 style="border-radius: 5px; margin-left: 10px">{{ post.get_good_place_display}}</h4>
+        <h4 style="border-radius: 5px; margin-left: 10px">{{ post.get_rental_item_display}}</h4>
             </div>
-        <div style="padding-top: 50px">
-        <h3>조회수 {{ post.user_check}}</h3>
+        <div style="padding-top: 20px">
+        <h3>조회수 {{ post.user_check}}</h3> <h3>댓글 수 {{ post.post_review.count}}</h3>
             </div>
     </div>
         </div>

@@ -76,12 +76,68 @@ class Main_page(APIView):
 
         else:
             return Response(status=status.HTTP_200_OK, template_name='main/main_page.html', data={"post": post_re.values()})
+class Post_search(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    def post(self, request):
+        user_check = request.session.get('user')
+        user = User.objects.get(id=user_check)
+        user_re = User_Categories.objects.filter(user=user_check)
+        post_re = Post.objects.all()
+
+        main_table_values = user_re.values()
+        post_table_values = post_re.values()
+        if post_table_values:
+            first_queryset = main_table_values
+            second_queryset = post_table_values
+
+            first_query = first_queryset[0]
+            sorted_queries = sorted(second_queryset,
+                                    key=lambda x: len(Counter(x.items()) & Counter(first_query.items())),
+                                    reverse=True)
+            grouped_queries = []
+            for key, group in groupby(sorted_queries,
+                                      key=lambda x: len(Counter(x.items()) & Counter(first_query.items()))):
+                queries = list(group)
+                grouped_queries.append(queries)
+            posts = []
+            filters = Q()  # 빈 Q 객체 생성
+
+            if request.data['ambience']:
+                filters &= Q(ambience__icontains=request.data['ambience'])
+
+            if request.data['personnel']:
+                filters &= Q(personnel__icontains=request.data['personnel'])
+
+            if request.data['view']:
+                filters &= Q(view__icontains=request.data['view'])
+
+            if request.data['good_place']:
+                filters &= Q(good_place__icontains=request.data['good_place'])
+
+            if request.data['rental_item']:
+                filters &= Q(rental_item__icontains=request.data['rental_item'])
+            for grouped_mapping in grouped_queries:
+                filter_condition = Q()
+                for fields_mapping in grouped_mapping:
+                    q_objects = Q(**fields_mapping)
+                    filter_condition |= q_objects
+                my_objects = Post.objects.filter(filter_condition)
+                posts.append(my_objects.order_by('-user_check').filter(filters))
+
+            print(posts)
+
+            return Response(status=status.HTTP_200_OK, template_name='main/main_page.html', data={"post": posts})
+
+        else:
+            return Response(status=status.HTTP_200_OK, template_name='main/main_page.html',
+                            data={"post": post_re.values()})
+
 
 class Select_post(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request, pk):
-        user_check = request.session.get('user')
-        if user_check is None:
+        check_user = request.session.get('user')
+        if check_user is None:
             return redirect('user_set:login')
         post = Post.objects.get(id=pk)
         post.user_check += 1
@@ -89,7 +145,7 @@ class Select_post(APIView):
         review_set = Review_Serializer(data=request.data)
         return Response(status=status.HTTP_200_OK, template_name='main/post.html', data={"post": post, 'pk': pk,
                                                                                          'review': review_set,
-                                                                                         'check_user': user_check})
+                                                                                         'check_user': check_user})
 
 class Review_make(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -123,3 +179,46 @@ class Many_image(APIView):
         else:
             return redirect('summer_spot:post', pk)
 
+class Post_retouch(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request, pk):
+        user_check = request.session.get('user')
+        if user_check is None:
+            return redirect('user_set:login')
+        post = Post.objects.get(id=pk)
+        post_check = Post_Serializer(instance=post)
+        post_cat = Post_Categories_Serializer(instance=post)
+        return Response(status=status.HTTP_200_OK, template_name='main/post_retouch.html', data={"post": post_check,
+                                                                                                 'post_cat':post_cat,
+                                                                                                 'pk': pk})
+
+    def post(self, request, pk):
+        post = Post.objects.get(id=pk)
+        post_check = Post_Serializer(post, data=request.data)
+        if post_check.is_valid():
+            post_check.save()
+            return redirect('summer_spot:main_page')
+        else:
+            return Response(status=status.HTTP_200_OK, template_name='main/post_retouch.html',
+                                data={"post": post_check, 'pk': pk})
+
+class Post_images_del(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request, pk, pk2):
+        post = Post.objects.get(id=pk)
+        post.post_image.get(id=pk2).delete()
+        return redirect('summer_spot:post', pk)
+
+class Review_del(APIView):
+
+    def get(self, request, pk, pk2):
+        post = Post.objects.get(id=pk)
+        post.post_review.get(id=pk2).delete()
+        return redirect('summer_spot:post', pk)
+
+class Post_del(APIView):
+    def get(self, request, pk):
+        Post.objects.get(id=pk).delete()
+        return redirect('summer_spot:main_page')

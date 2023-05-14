@@ -3,7 +3,7 @@ from django.db import models
 class User(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     nickname = models.CharField(unique=True, max_length=50, verbose_name="닉네임") # 닉네임
-    region = models.CharField(max_length=50, blank=True, verbose_name="희망 지역(시로 입력해 주세요)")  # 지역
+    region = models.CharField(max_length=50, blank=True, verbose_name="희망 지역(예: 서울, 충남)")  # 지역
     def __str__(self):
         return self.nickname
 
@@ -32,7 +32,7 @@ class User_Categories(models.Model): # 카테고리
     RENTAL_ITEM = (
         ('1', '수영복'),
         ('2', '튜브'),
-        ('2', '오리발'),
-        ('2', '매트'),)
+        ('3', '오리발'),
+        ('4', '매트'),)
     rental_item = models.CharField(verbose_name='대여 물품', max_length=1, choices=RENTAL_ITEM, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

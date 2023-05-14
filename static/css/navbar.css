@@ -4,7 +4,8 @@
     text-decoration:none;color:#fff;font-size:15px
 }
 #nav3 {
-  overflow:hidden;height:80px;background-color:#1b2035;margin-bottom: 50px;
+  overflow:hidden;height:80px;background-color:#1b2035;
+  margin-bottom:20px;
   width: 100%;
   position: relative;
   text-align: center;

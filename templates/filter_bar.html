@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load static %}
+<link href="{% static 'css/navbar.css' %}" rel="stylesheet" />
+<div style="margin:0; padding: 0;">
+  <nav id="nav3" style="background-color: white">
+      <form method=POST action="{% url 'summer_spot:post_search' %}">
+          {% csrf_token %}
+    <ul>
+      <div>
+        <label for="ambience">분위기:</label>
+        <select  type="text" id="ambience" name="ambience" class="search_select">
+            <option value="">전체</option>
+            <option value="1">신선한</option>
+            <option value="2">조용한</option>
+            <option value="3">왁자지껄한</option>
+        </select>
+    </div>
+        </ul>
+      <ul>
+    <div>
+        <label for="personnel">인원:</label>
+        <select type="text" id="personnel" name="personnel" class="search_select">
+            <option value="">전체</option>
+            <option value="1">혼자</option>
+            <option value="2">둘이</option>
+            <option value="3">셋이</option>
+            <option value="4">여러 명이</option>
+        </select>
+    </div>
+    </ul>
+      <ul>
+    <div>
+        <label for="view">풍경:</label>
+        <select type="text" id="view" name="view" class="search_select">
+            <option value="">전체</option>
+            <option value="1">자연적인</option>
+            <option value="2">사진 찍기 좋은</option>
+        </select>
+    </div>
+    </ul>
+      <ul>
+    <div>
+        <label for="good_place">놀 거리:</label>
+        <select type="text" id="good_place" name="good_place" class="search_select">
+            <option value="">전체</option>
+            <option value="1">빠지</option>
+            <option value="2">맛집이 많은</option>
+            <option value="3">물놀이</option>
+            <option value="4">다이빙 장소</option>
+        </select>
+    </div>
+    </ul>
+      <ul>
+    <div>
+        <label for="rental_item">대여 물품:</label>
+        <select type="text" id="rental_item" name="rental_item" class="search_select">
+            <option value="">전체</option>
+            <option value="1">수영복</option>
+            <option value="2">튜브</option>
+            <option value="3">오리발</option>
+            <option value="4">매트</option>
+        </select>
+    </div>
+    </ul>
+          <button class="custom-btn btn-6" style="width: 90px;" type="submit">
+    <span>Search Post</span></button>
+          <button class="custom-btn btn-6" style="width: 80px;" onclick="location.href='{% url 'summer_spot:main_page' %}'">
+    <span>ReSet</span></button>
+      </form>
+  </nav>
+</div>

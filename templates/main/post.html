@@ -11,11 +11,18 @@
 </head>
 <body>
 <link href="/css/star.css" rel="stylesheet"/>
+<h1 style="text-align: center;">{{ post.title }}</h1>
 <div style="text-align: center; margin-bottom: 20px">
-    <div class="slider-container">
+    <div class="slider-container" style="height: 450px;">
     <div class="slider" style="width: 1000px">
         {% for image in post.post_image.all %}
-      <div class="slide"><img src="{{ image.images.url }}" style="border-radius: 15px;width: 600px; height: 400px"></div>
+      <div class="slide" style="height: 500px; padding-top: 100px">
+          <img src="{{ image.images.url }}" style="border-radius: 15px;width: 600px; height: 400px">
+          <h4>{{ image.images_name }}
+              {% if check_user == post.user.id %}
+      <button class="close-button" onclick="location.href='{% url 'summer_spot:post_image_del' pk=pk pk2=image.id %}'">
+    <span>X</span></button></h4>
+      {% endif %}</div>
         {% endfor %}
     </div>
   </div>
@@ -29,9 +36,11 @@
          {{ post.get_view_display}} / {{ post.get_good_place_display}} /
         {{ post.get_rental_item_display}}</h3>
 </div>
+{% if check_user == post.user.id %}
 <div class="out_centered" style="margin-top: 10px">
 <button class="custom-btn btn-6" id="open-modal-btn">
-    <span>Make Post</span></button>
+    <span>ADD Image</span></button>
+    {% endif %}
   <div id="modal" class="modal">
     <div class="modal-content">
       <span class="close-btn">&times;</span>
@@ -51,41 +60,58 @@
     </div>
   </div>
 </div>
-<div class="out_centered">
+<div class="out_centered" style="margin-bottom: 20px">
         <div class="container" style="padding: 8px">
 
-               <div style="padding-left: 150px"><div id='maps' style="width: 400px; height: 400px"></div>
+               <div><div id='maps' style="width: 400px; height: 400px"></div>
                </div>
 
-    <div style="width: 400px; height: 250px;padding-left: 100px">
-        <div style="margin-bottom: 50px; margin-top: 10px"><h2>{{ post.region}}</h2></div>
-        <div style="margin-bottom: 50px;">
-        <h3>{{ post.place}}</h3>
+    <div style="width: 400px;padding-left: 100px">
+        <div style="margin-bottom: 50px; padding-top: 30px"><h2>{{ post.title}}</h2></div>
+        <div>
+        <h3>{{ post.content}}</h3>
             </div>
         <div style="padding-top: 50px">
             </div>
     </div>
         </div>
         </div>
+{% if check_user == post.user.id %}
+<div class="out_centered" style="margin-bottom: 20px">
+<button class="custom-btn btn-6"  onclick="location.href='{% url 'summer_spot:post_retouch' pk %}'">
+    <span>Re-touch</span></button>
+    <div style="margin-left: 10px">
+<button class="custom-btn btn-6"  onclick="location.href='{% url 'summer_spot:post_del' pk %}'">
+    <span>Post Delete</span></button></div>
+</div>
+{% endif %}
 {% for post_review in post.post_review.all %}
-<div class="out_centered" style="border-bottom:1px black solid; border-top:1px black solid">
-        <div class="container" style="width: 800px;
-        justify-content: left; height: 150px">
+<div class="out_centered">
+        <div class="container" style="width: 900px;
+        justify-content: left; height: 100px; padding-left: 10px;
+         border-bottom:1px black solid; border-top:1px black solid">
+            <div style="width: 100px">
 
-               <div><div>
-               <h2>{{ post_review.user}}</h2>
-                <h2>{{ post_review.like}}</h2></div>
+               <h3>{{ post_review.user}}</h3>
+                <h3>★x{{ post_review.like}}</h3>
                </div>
-
-    <div style="padding-left: 100px">
-        <div><h2><h3>{{ post_review.comment}}</h3></h2></div>
+<div>
+    <div style="width: 700px; padding-left: 20px">
+        <h3>{{ post_review.comment}}</h3>
     </div>
-        </div>
+
+                </div>
+            {% if check_user == post.user.id %}
+            <div> <a style="text-decoration: none; color: black" href="{% url 'summer_spot:review_del' pk=pk pk2=post_review.id %}"><h3>X</h3></a></div>
+            {% endif %}
+            </div>
         </div>
 {% endfor %}
+<div style="margin-left: 100px; margin-right: 100px;">
 <form method=POST  name="review_form" id="review_form" action="{% url 'summer_spot:review_make' pk%}" enctype="multipart/form-data">
     {% csrf_token %}
 <fieldset>
+
 		<span class="text-bold">별점을 선택해주세요</span>
 		<input type="radio" name="like" value="5" id="rate1"><label
 			for="rate1">★</label>
@@ -102,8 +128,11 @@
 		<textarea class="col-auto form-control" type="text" id="reviewContents" name="comment"
 				  placeholder="리뷰를 작성해 주세요"></textarea>
 	</div>
-    <button type="submit" class="btn btn-primary" style="color: black">확인</button>
+
+    <button type="submit" class="custom-btn btn-6">작 성</button>
 </form>
+</div>
+<script  type="text/javascript" src="{% static '/js/post_map.js' %}"></script>
 </body>
 {% endblock %}
 </html>
