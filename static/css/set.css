@@ -56,4 +56,8 @@
   color: #fff;
   padding: 3px 0;
 }
+.scrollable-div {
+  overflow: auto;
+  max-height: 200px;
+}
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Review, Many_image
+from .models import Post, Review, Many_image, Post_list
 
 
 class Post_Serializer(serializers.ModelSerializer):
@@ -57,12 +57,39 @@ class Review_Serializer(serializers.ModelSerializer):
     def create(self, validated_data):
         users = self.context.get('user')
         bool = Review.objects.create(comment=validated_data['comment'],
-                                   user=users,
-                                   like=validated_data['like'],
-                                   )
+                                     user=users,
+                                     like=validated_data['like'],
+                                     )
         return bool
+
 
 class Many_image_Serializer(serializers.ModelSerializer):
     class Meta:
         model = Many_image
         fields = '__all__'
+
+
+class Post_list_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post_list
+        fields = '__all__'
+
+    def create(self, validated_data):
+        bool = Post_list.objects.create(list_title=validated_data['list_title'],
+                                     list_content=validated_data['list_content'],
+                                     list_image=validated_data['list_image'],
+                                     list_place=validated_data['list_place'],
+                                     division=validated_data['division'],
+                                     )
+        return bool
+
+    def update(self, instance, validated_data):
+        instance.list_title = validated_data.get('list_title', instance.list_title)
+        instance.list_content = validated_data.get('list_content', instance.list_content)
+        list_image = validated_data.pop('list_image', None)
+        instance.list_place = validated_data.get('list_place', instance.list_place)
+        instance.division = validated_data.get('division', instance.division)
+        if list_image:
+            instance.list_image = list_image
+        instance.save()
+        return instance

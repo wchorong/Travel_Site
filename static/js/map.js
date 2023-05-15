@@ -29,7 +29,12 @@ geocoder.addressSearch(data.address, function(result, status) {
             map: map,
             position: coord
         });
-        marker.setMap(map);
+
+         map.setCenter(coord);
+
+         var bounds = new kakao.maps.LatLngBounds();
+        bounds.extend(coord);
+        map.setBounds(bounds);
     }
 });
             }

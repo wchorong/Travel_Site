@@ -17,8 +17,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from user_set.views import Login
 
 urlpatterns = [
+    path('', Login.as_view(), name='login'),
     path('admin/', admin.site.urls),
     path('main/', include("summer_spot.urls")),
     path('account/', include("user_set.urls")),

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import Main_page, Post_make, Select_post, Review_make, Many_image, Post_retouch, \
-    Post_images_del, Review_del, Post_search, Post_del
+    Post_images_del, Review_del, Post_search, Post_del,Post_list_make, Post_list_retouch,Post_list, \
+    Post_list_del
 app_name = 'summer_spot'
 urlpatterns = [
     path('', Main_page.as_view(), name='main_page'), # 메인 페이지
@@ -13,4 +14,8 @@ urlpatterns = [
     path('post/del_review/<int:pk>/<int:pk2>', Review_del.as_view(), name='review_del'),
     path('post/post_search/', Post_search.as_view(), name='post_search'),
     path('post/post_del/<int:pk>/', Post_del.as_view(), name='post_del'),
+    path('post/post_list/make/<int:pk>/', Post_list_make.as_view(), name='post_list_make'),
+    path('post/post_list/retouch/<int:pk>/<int:pk2>', Post_list_retouch.as_view(), name='post_list_retouch'),
+    path('post/post_list/<int:pk>/<int:pk2>', Post_list.as_view(), name='post_list'),
+    path('post/post_list_del/<int:pk>/<int:pk2>', Post_list_del.as_view(), name='post_list_del'),
 ]

@@ -1,13 +1,18 @@
 from django.db import models
 
-class User(models.Model):
+
+class BaseModel(models.Model):
+    modify_date = models.DateTimeField(auto_now=True)
     create_date = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        abstract = True
+class User(BaseModel):
     nickname = models.CharField(unique=True, max_length=50, verbose_name="닉네임") # 닉네임
     region = models.CharField(max_length=50, blank=True, verbose_name="희망 지역(예: 서울, 충남)")  # 지역
     def __str__(self):
         return self.nickname
 
-class User_Categories(models.Model): # 카테고리
+class User_Categories(BaseModel): # 카테고리
     AMBIENCE = (
         ('1', '신선한'),
         ('2', '조용한'),

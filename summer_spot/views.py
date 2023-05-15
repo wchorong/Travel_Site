@@ -8,7 +8,8 @@ from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializer import Post_Serializer,Post_Categories_Serializer, Review_Serializer, Many_image_Serializer
+from .serializer import Post_Serializer,Post_Categories_Serializer, Review_Serializer, Many_image_Serializer, \
+    Post_list_Serializer
 from .models import Post
 from user_set.models import User, User_Categories
 
@@ -222,3 +223,60 @@ class Post_del(APIView):
     def get(self, request, pk):
         Post.objects.get(id=pk).delete()
         return redirect('summer_spot:main_page')
+
+class Post_list_make(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    def get(self, request, pk):
+        form = Post_list_Serializer()
+        return Response(status=status.HTTP_200_OK, template_name='main/post_list_make.html',
+                        data={"form": form, 'pk': pk})
+
+    def post(self, request, pk):
+        post = Post.objects.get(id=pk)
+        form = Post_list_Serializer(data=request.data)
+        if form.is_valid():
+            post_list = form.save()
+            post.post_list.add(post_list)
+            post.save()
+            return redirect('summer_spot:post', pk)
+        else:
+            return Response(status=status.HTTP_200_OK, template_name='main/post_list_make.html',
+                            data={"form": form, 'pk': pk})
+class Post_list_retouch(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request, pk, pk2):
+        post = Post.objects.get(id=pk)
+        post_list = post.post_list.get(id=pk2)
+        post_check = Post_list_Serializer(instance=post_list)
+        return Response(status=status.HTTP_200_OK, template_name='main/post_list_retouch.html', data={"form": post_check,
+                                                                                                      'pk': pk,
+                                                                                                      'pk2': pk2})
+
+    def post(self, request, pk, pk2):
+        post = Post.objects.get(id=pk)
+        post_list = post.post_list.get(id=pk2)
+        post_list_check = Post_list_Serializer(post_list, data=request.data)
+        if post_list_check.is_valid():
+            post_list_check.save()
+            print("asdasdas")
+            return redirect('summer_spot:post', pk)
+        else:
+            return Response(status=status.HTTP_200_OK, template_name='main/post_list_retouch.html',
+                            data={"form": post_list_check, 'pk': pk, 'pk2': pk2})
+
+class Post_list(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    def get(self, request, pk, pk2):
+        post = Post.objects.get(id=pk)
+        post_list = post.post_list.get(id=pk2)
+        return Response(status=status.HTTP_200_OK, template_name='main/post_list.html',
+                        data={"post_list": post_list, 'pk': pk, 'pk2': pk2})
+
+class Post_list_del(APIView):
+
+    def get(self, request, pk, pk2):
+        post = Post.objects.get(id=pk)
+        post.post_list.get(id=pk2).delete()
+        post.save()
+        return redirect('summer_spot:post', pk)

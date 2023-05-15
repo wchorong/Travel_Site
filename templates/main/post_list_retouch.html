@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Retouch</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link href="{% static 'css/set.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/butten.css' %}" rel="stylesheet" />
+</head>
+<body>
+{% include "list_make_bar.html" %}
+<h1 style="text-align: center;">리스트 작성</h1>
+<form method=POST  name="review_form" id="review_form" action="{% url 'summer_spot:post_list_retouch' pk pk2%}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3 container">
+        <label for="rental_item">리스트 구분:</label>
+        <select type="text" id="rental_item" name="division" class="search_select">
+            <option value="">전체</option>
+            <option value="1">편의시설</option>
+            <option value="2">맛집</option>
+            <option value="3">볼거리</option>
+            <option value="4">놀거리</option>
+        </select>
+    </div>
+    <div class="mb-3 container" style="width: 500px; display: block; margin-top: 20px">
+            <label for="list_title"><p class="text-muted" style="margin: 0px; color: black; !important;">제목</p></label>
+            <input type="text" class="form-control" name="list_title" id="list_title"
+                   placeholder="장소를 입력해 주세요"
+                   value="{{ form.list_title.value|default_if_none:'' }}">
+        </div>
+    <div class="mb-3 container" style="width: 500px; display: block; margin-top: 20px">
+            <label for="title"><p class="text-muted" style="margin: 0px; color: black; !important;">장소</p></label>
+            <input type="text" class="form-control" name="list_place" id="place"
+                   placeholder="장소를 입력해 주세요"
+                   value="{{ form.list_place.value|default_if_none:'' }}">
+        </div>
+    <div id="map" class="container" style="width:250px;height:250px; display: none;"></div>
+    <div class="mb-3 container" style=" width: 500px; display: block; margin-top: 20px">
+            <label for="list_image"><p class="text-muted" style="margin: 0px; color: black; !important;">이미지 첨부</p></label>
+            <input type="file" class="form-control" name="list_image" id="list_image">
+        </div>
+    <div class="mb-3 container" style="width: 500px; display: block; margin-top: 20px">
+    <label for="list_content"><p class="text-muted" style="margin: 0px; color: black; !important;">설명</p></label>
+		<textarea class="col-auto form-control" style="height: 200px" type="text" id="reviewContents" name="list_content"
+				  placeholder="설명을 작성해주세요">{{ form.list_content.value }}</textarea>
+	</div>
+
+    <div class="container" style="margin-top: 30px">
+    <button type="submit" class="custom-btn btn-6">작 성</button>
+        </div>
+</form>
+<script  type="text/javascript" src="{% static '/js/map.js' %}"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	fe7ad61fd61d620b72278f6765994dc2&libraries=services"></script>
+</body>
+{% endblock %}
+</html>

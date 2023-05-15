@@ -19,9 +19,14 @@ geocoder.addressSearch(start, function(result, status) {
 
         // 결과값으로 받은 위치를 마커로 표시합니다
         var marker = new kakao.maps.Marker({
+            map: map,
             position: coord
         });
-        marker.setMap(map);
+        map.setCenter(coord);
+
+        var bounds = new kakao.maps.LatLngBounds();
+        bounds.extend(coord);
+        map.setBounds(bounds);
 
 
     }
