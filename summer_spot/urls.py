@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import Main_page, Post_make, Select_post, Review_make, Many_image, Post_retouch, \
     Post_images_del, Review_del, Post_search, Post_del,Post_list_make, Post_list_retouch,Post_list, \
-    Post_list_del, Post_region
+    Post_list_del, Post_region, Weather
 app_name = 'summer_spot'
 urlpatterns = [
     path('', Main_page.as_view(), name='main_page'), # 메인 페이지
@@ -19,4 +19,5 @@ urlpatterns = [
     path('post/post_list/<int:pk>/<int:pk2>', Post_list.as_view(), name='post_list'), # 선택한 피드 리스트
     path('post/post_list_del/<int:pk>/<int:pk2>', Post_list_del.as_view(), name='post_list_del'), # 선택한 피드 리스트 삭제
     path('post/post_search_region/', Post_region.as_view(), name='post_region'), # 피드 지역 검색
+    path('post/weather/<int:pk>/', Weather.as_view(), name='weather'),  # 선택한 피드 날씨
 ]

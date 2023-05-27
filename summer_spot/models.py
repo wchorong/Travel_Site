@@ -60,6 +60,7 @@ class Post_list(BaseModel): # 피드 리스트
 class Post(BaseModel): # 피드
     region = models.CharField(max_length=50, blank=True)  # 지역
     place = models.CharField(max_length=50, blank=True)  # 주소
+    zip_code = models.CharField(max_length=50, blank=True)  # 우편 번호
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True) # 작성자
     title_image = models.ImageField(upload_to='title', null=True) # 피드 이미지
     user_check = models.IntegerField(default=0) # 조회수

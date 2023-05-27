@@ -26,6 +26,8 @@ SECRET_KEY = 'django-insecure-x63xy%&+at7_#f9borz#f#oawdo*wt_5oag7-y9%^a=wshkz(2
 DEBUG = True
 
 ALLOWED_HOSTS = []
+WEATHER_API_KEY = 'bfa0a81dd788fcb9a6231d1e294cf611'
+UVI_API_KEY = 'openuv-15n2nerli5prh3g-io'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 # Application definition

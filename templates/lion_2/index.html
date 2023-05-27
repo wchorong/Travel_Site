@@ -35,31 +35,33 @@
             <span>찾아보세요!</span>
         </div>
         <div class="searchboxWrap" style="background-color: rgba(255, 255, 255, 0.718); width: 27vw; padding: 10px; border-radius: 10px;">
-            <select name="searchbox" id="" onchange="categoryChange(this)" style="height: 5vh; width: 10vw; font-size: 19px; background-color: transparent; 
+            <form method=POST action="{% url 'summer_spot:post_region' %}">
+            <select name="searchbox" id="" onchange="categoryChange(this)" style="height: 5vh; width: 10vw; font-size: 19px; background-color: transparent;
             color: rgba(0, 0, 0, 0.853); border-style: none; border-bottom: 2px solid rgba(0, 0, 0, 0.642); font-weight: bold; padding-right: 20px;">
                 <option value="">시/도 선택</option>
                 <option value="서울">서울</option>
-                <option value="general02">경기</option>
-                <option value="general11">인천광역시</option>
-                <option value="general17">부산광역시</option>
-                <option value="general06">대구광역시</option>
-                <option value="general07">대전광역시</option>
-                <option value="general05">광주광역시</option>
-                <option value="general10">울산광역시</option>
-                <option value="general01">강원</option>
-                <option value="general16">충북</option>
-                <option value="general15">충남</option>
-                <option value="general04">경북</option>
-                <option value="general03">경남</option>
-                <option value="general13">전북</option>
-                <option value="general12">전남</option>
-                <option value="general14">제주</option>
+                <option value="경기">경기</option>
+                <option value="인천광역시">인천광역시</option>
+                <option value="부산광역시">부산광역시</option>
+                <option value="대구광역시">대구광역시</option>
+                <option value="대전광역시">대전광역시</option>
+                <option value="광주광역시">광주광역시</option>
+                <option value="울산광역시">울산광역시</option>
+                <option value="강원">강원</option>
+                <option value="충북">충북</option>
+                <option value="충남">충남</option>
+                <option value="경북">경북</option>
+                <option value="경남">경남</option>
+                <option value="전북">전북</option>
+                <option value="전남">전남</option>
+                <option value="제주">제주</option>
             </select>
-            <select name="searchbox" id="state" style="height: 5vh; width: 10vw; font-size: 19px; background-color: transparent; 
+            <select name="searchbox2" id="state" style="height: 5vh; width: 10vw; font-size: 19px; background-color: transparent;
             color: rgba(0, 0, 0, 0.853); border-style: none; border-bottom: 2px solid rgba(0, 0, 0, 0.642); font-weight: bold;">
                 <option>군/구 선택</option>
             </select>
             <button class="searchBtn"><i class="bi bi-search" style="font-size: 20px; color: white; width: 5px; height: 5px"></i></button>
+            </form>
         </div>
         <video class="mainMP4" src="/media/oceanMP4.mp4" autoplay muted loop></video>
     </mp4Container>

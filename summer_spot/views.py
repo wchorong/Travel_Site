@@ -12,6 +12,8 @@ from .serializer import Post_Serializer,Post_Categories_Serializer, Review_Seria
     Post_list_Serializer
 from .models import Post
 from user_set.models import User, User_Categories
+from lion_project import settings
+import requests
 
 
 class Post_make(APIView): # 휴양지 피드 만들기
@@ -86,7 +88,7 @@ class Post_region(APIView): # 지역 검색
             return redirect('user_set:login')
         post_re = Post.objects.filter(region=request.data['searchbox'])
         user = User.objects.get(id=user_check)
-        user_re = User_Categories.objects.filter(user=user_check)
+        user_re = User_Categories.objects.filter(user=user)
 
         main_table_values = user_re.values()
         post_table_values = post_re.values()
@@ -111,10 +113,10 @@ class Post_region(APIView): # 지역 검색
                     filter_condition |= q_objects
                 my_objects = Post.objects.filter(filter_condition)
                 posts.append(my_objects.order_by('-user_check'))
-                return Response(status=status.HTTP_200_OK, template_name='main/main_page.html', data={"post": posts})
+                return Response(status=status.HTTP_200_OK, template_name='lion_2/index.html', data={"post": posts})
 
         else:
-                return Response(status=status.HTTP_200_OK, template_name='main/main_page.html', data={"post": post_re.values()})
+                return Response(status=status.HTTP_200_OK, template_name='lion_2/index.html', data={"post": post_re.values()})
 class Post_search(APIView): # 피드 검색
     renderer_classes = [TemplateHTMLRenderer]
     def post(self, request):
@@ -186,6 +188,33 @@ class Select_post(APIView): # 선택한 피드
                                                                                          'review': review_set,
                                                                                          'check_user': check_user})
 
+class Weather(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    def get(self, request, pk):
+        check_user = request.session.get('user')
+        if check_user is None:
+            return redirect('user_set:login')
+        post = Post.objects.get(id=pk)
+        API_key = settings.WEATHER_API_KEY
+        zip_code = post.zip_code
+        url = f'http://api.openweathermap.org/geo/1.0/zip?zip={zip_code},KR&appid={API_key}&lang=kr'
+        response = requests.get(url)
+        lat, lon = response.json()['lat'], response.json()['lon']
+        url = f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API_key}'
+        response = requests.get(url)
+        weather_set = response.json()
+        weather, temp = weather_set['weather'][0]['main'], weather_set['main']['temp']
+        UV_API = settings.UVI_API_KEY
+        url = f'https://api.openuv.io/api/v1/uv?lat={lat}&lng={lon}'
+        headers = {'x-access-token': UV_API}
+        response = requests.get(url, headers=headers)
+        uv_data = response.json()
+        uv, uv_max = uv_data['result']['uv'], uv_data['result']['uv_max']
+        print(uv, uv_max, weather, temp)
+        return Response(status=status.HTTP_200_OK, template_name='main/weather.html', data={"uv": uv, 'pk': pk,
+                                                                                         'uv_max': uv_max,
+                                                                                         'weather': weather,
+                                                                                            'temp': temp})
 class Review_make(APIView): # 댓글 생성
     renderer_classes = [TemplateHTMLRenderer]
 

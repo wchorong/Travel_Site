@@ -6,7 +6,7 @@ class Post_Serializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('title_image', 'place', 'ambience', 'personnel', 'view', 'good_place', 'rental_item',
-                  'title', 'content', 'user')
+                  'title', 'content', 'user', 'zip_code')
 
     def create(self, validated_data):
         users = self.context.get('user')
@@ -22,12 +22,14 @@ class Post_Serializer(serializers.ModelSerializer):
                                    rental_item=validated_data['rental_item'],
                                    title=validated_data['title'],
                                    content=validated_data['content'],
+                                   zip_code=validated_data['zip_code'],
                                    )
         return bool
 
     def update(self, instance, validated_data):
+        region_set = validated_data['place'].split()
         instance.place = validated_data.get('place', instance.place)
-        instance.region = validated_data.get('region', instance.region)
+        instance.region = validated_data.get('region', region_set[0])
         title_image = validated_data.pop('title_image', None)
         instance.ambience = validated_data.get('ambience', instance.ambience)
         instance.personnel = validated_data.get('personnel', instance.personnel)
@@ -37,6 +39,7 @@ class Post_Serializer(serializers.ModelSerializer):
         instance.rental_item = validated_data.get('rental_item', instance.rental_item)
         instance.title = validated_data.get('title', instance.title)
         instance.content = validated_data.get('content', instance.content)
+        instance.zip_code = validated_data.get('zip_code', instance.zip_code)
         if title_image:
             instance.title_image = title_image
         instance.save()

@@ -3,6 +3,7 @@ window.onload = function(){
         //카카오 지도 발생
         new daum.Postcode({
             oncomplete: function(data) { //선택시 입력값 세팅
+                document.getElementById("zip_code").value = data.zonecode;
                 document.getElementById("place").value = data.address; // 주소 넣기
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
