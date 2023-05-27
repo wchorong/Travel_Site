@@ -29,13 +29,13 @@ class Nickname_set(APIView): #유저 만들기
 class Login(APIView): # 로그인
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request):
-        return Response(status=status.HTTP_200_OK, template_name='account/login.html')
+        return Response(status=status.HTTP_200_OK, template_name='lion_2/login.html')
     def post(self, request):
         try:
             user_check = User.objects.get(nickname=request.data['nickname'])
         except:
             nickname = request.data['nickname']
             error = "유저가 존재하지 않습니다."
-            return Response(status=status.HTTP_200_OK, template_name='account/login.html', data={"error": error, "nickname": nickname})
+            return Response(status=status.HTTP_200_OK, template_name='lion_2/login.html', data={"error": error, "nickname": nickname})
         request.session['user'] = user_check.id
         return redirect('summer_spot:main_page')
