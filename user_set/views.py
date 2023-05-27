@@ -26,7 +26,7 @@ class Nickname_set(APIView): #유저 만들기
         else:
             return Response(status=status.HTTP_200_OK, template_name='account/name_make.html', data={'form': form})
 
-class Login(APIView):
+class Login(APIView): # 로그인
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request):
         return Response(status=status.HTTP_200_OK, template_name='account/login.html')

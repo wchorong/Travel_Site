@@ -14,7 +14,7 @@ from .models import Post
 from user_set.models import User, User_Categories
 
 
-class Post_make(APIView): # 휴양지 게시판 만들기
+class Post_make(APIView): # 휴양지 피드 만들기
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request):
         user_check = request.session.get('user')
@@ -39,7 +39,7 @@ class Post_make(APIView): # 휴양지 게시판 만들기
             return Response(status=status.HTTP_200_OK, template_name='main/post_make.html',
                             data={'post': post, 'error': error})
 
-class Main_page(APIView):
+class Main_page(APIView): # 피드 리스트
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request):
         user_check = request.session.get('user')
@@ -73,11 +73,49 @@ class Main_page(APIView):
                 my_objects = Post.objects.filter(filter_condition)
                 posts.append(my_objects.order_by('-user_check'))
 
-            return Response(status=status.HTTP_200_OK, template_name='main/main_page.html', data={"post": posts})
+            return Response(status=status.HTTP_200_OK, template_name='lion_2/index.html', data={"post": posts})
 
         else:
-            return Response(status=status.HTTP_200_OK, template_name='main/main_page.html', data={"post": post_re.values()})
-class Post_search(APIView):
+            return Response(status=status.HTTP_200_OK, template_name='lion_2/index.html', data={"post": post_re.values()})
+
+class Post_region(APIView): # 지역 검색
+    renderer_classes = [TemplateHTMLRenderer]
+    def post(self, request):
+        user_check = request.session.get('user')
+        if user_check is None:
+            return redirect('user_set:login')
+        post_re = Post.objects.filter(region=request.data['searchbox'])
+        user = User.objects.get(id=user_check)
+        user_re = User_Categories.objects.filter(user=user_check)
+
+        main_table_values = user_re.values()
+        post_table_values = post_re.values()
+        if post_table_values:
+            first_queryset = main_table_values
+            second_queryset = post_table_values
+
+            first_query = first_queryset[0]
+            sorted_queries = sorted(second_queryset,
+                                    key=lambda x: len(Counter(x.items()) & Counter(first_query.items())),
+                                    reverse=True)
+            grouped_queries = []
+            for key, group in groupby(sorted_queries,
+                                      key=lambda x: len(Counter(x.items()) & Counter(first_query.items()))):
+                queries = list(group)
+                grouped_queries.append(queries)
+            posts = []
+            for grouped_mapping in grouped_queries:
+                filter_condition = Q()
+                for fields_mapping in grouped_mapping:
+                    q_objects = Q(**fields_mapping)
+                    filter_condition |= q_objects
+                my_objects = Post.objects.filter(filter_condition)
+                posts.append(my_objects.order_by('-user_check'))
+                return Response(status=status.HTTP_200_OK, template_name='main/main_page.html', data={"post": posts})
+
+        else:
+                return Response(status=status.HTTP_200_OK, template_name='main/main_page.html', data={"post": post_re.values()})
+class Post_search(APIView): # 피드 검색
     renderer_classes = [TemplateHTMLRenderer]
     def post(self, request):
         user_check = request.session.get('user')
@@ -134,7 +172,7 @@ class Post_search(APIView):
                             data={"post": post_re.values()})
 
 
-class Select_post(APIView):
+class Select_post(APIView): # 선택한 피드
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request, pk):
         check_user = request.session.get('user')
@@ -148,7 +186,7 @@ class Select_post(APIView):
                                                                                          'review': review_set,
                                                                                          'check_user': check_user})
 
-class Review_make(APIView):
+class Review_make(APIView): # 댓글 생성
     renderer_classes = [TemplateHTMLRenderer]
 
     def post(self, request, pk):
@@ -166,7 +204,7 @@ class Review_make(APIView):
         else:
             return Response(status=status.HTTP_200_OK, template_name='main/post.html', data={"post": post, 'pk': pk,
                                                                                              'review': review_set})
-class Many_image(APIView):
+class Many_image(APIView): # 피드용 이미지
 
     def post(self, request, pk):
         images = Many_image_Serializer(data=request.data)
@@ -180,7 +218,7 @@ class Many_image(APIView):
         else:
             return redirect('summer_spot:post', pk)
 
-class Post_retouch(APIView):
+class Post_retouch(APIView): # 피드 수정
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request, pk):
@@ -204,7 +242,7 @@ class Post_retouch(APIView):
             return Response(status=status.HTTP_200_OK, template_name='main/post_retouch.html',
                                 data={"post": post_check, 'pk': pk})
 
-class Post_images_del(APIView):
+class Post_images_del(APIView): # 피드 이미지 삭제
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request, pk, pk2):
@@ -212,19 +250,19 @@ class Post_images_del(APIView):
         post.post_image.get(id=pk2).delete()
         return redirect('summer_spot:post', pk)
 
-class Review_del(APIView):
+class Review_del(APIView): # 피드 댓글 삭제
 
     def get(self, request, pk, pk2):
         post = Post.objects.get(id=pk)
         post.post_review.get(id=pk2).delete()
         return redirect('summer_spot:post', pk)
 
-class Post_del(APIView):
+class Post_del(APIView): # 포스트 삭제
     def get(self, request, pk):
         Post.objects.get(id=pk).delete()
         return redirect('summer_spot:main_page')
 
-class Post_list_make(APIView):
+class Post_list_make(APIView): # 포스트 리스트 삭제
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request, pk):
         form = Post_list_Serializer()
@@ -242,7 +280,7 @@ class Post_list_make(APIView):
         else:
             return Response(status=status.HTTP_200_OK, template_name='main/post_list_make.html',
                             data={"form": form, 'pk': pk})
-class Post_list_retouch(APIView):
+class Post_list_retouch(APIView): # 피드 리스트 수정
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request, pk, pk2):
@@ -265,7 +303,7 @@ class Post_list_retouch(APIView):
             return Response(status=status.HTTP_200_OK, template_name='main/post_list_retouch.html',
                             data={"form": post_list_check, 'pk': pk, 'pk2': pk2})
 
-class Post_list(APIView):
+class Post_list(APIView): # 선택한 피드 리스트
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request, pk, pk2):
         post = Post.objects.get(id=pk)
@@ -273,7 +311,7 @@ class Post_list(APIView):
         return Response(status=status.HTTP_200_OK, template_name='main/post_list.html',
                         data={"post_list": post_list, 'pk': pk, 'pk2': pk2})
 
-class Post_list_del(APIView):
+class Post_list_del(APIView): # 선택한 피드 리스트 삭제
 
     def get(self, request, pk, pk2):
         post = Post.objects.get(id=pk)

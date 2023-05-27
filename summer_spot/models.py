@@ -9,19 +9,19 @@ from django.conf import settings
 from user_set.models import User, User_Categories
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-class BaseModel(models.Model):
+class BaseModel(models.Model): # 베이스 모델
     modify_date = models.DateTimeField(auto_now=True)
     create_date = models.DateTimeField(auto_now_add=True)
     class Meta:
         abstract = True
 
-class Review(BaseModel):
+class Review(BaseModel): # 댓글
     comment = models.CharField(max_length=100, blank=True)
     like = models.IntegerField(validators=[MinValueValidator(0),
                                        MaxValueValidator(5)], default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
 
-class Many_image(BaseModel):
+class Many_image(BaseModel): # 피드용 이미지
     images = models.ImageField(upload_to='post')
     images_name = models.CharField(max_length=10, blank=True)
 
@@ -32,7 +32,7 @@ def delete_image_file(sender, instance, **kwargs):
     if os.path.exists(image_path):
         os.remove(image_path)
 
-class Post_list(BaseModel):
+class Post_list(BaseModel): # 피드 리스트
     list_title = models.CharField(max_length=50)
     list_content = models.CharField(max_length=50, blank=True)
     list_place = models.CharField(blank=True, max_length=50)
@@ -57,7 +57,7 @@ class Post_list(BaseModel):
         super().save(*args, **kwargs)
 
 
-class Post(BaseModel):
+class Post(BaseModel): # 피드
     region = models.CharField(max_length=50, blank=True)  # 지역
     place = models.CharField(max_length=50, blank=True)  # 주소
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True) # 작성자
@@ -68,6 +68,7 @@ class Post(BaseModel):
     content = models.CharField(max_length=500) # 설명
     title = models.CharField(max_length=30) # 피드 제목
     post_list = models.ManyToManyField(Post_list, blank=True, related_name="post_list")
+
     AMBIENCE = (
         ('1', '신선한'),
         ('2', '조용한'),

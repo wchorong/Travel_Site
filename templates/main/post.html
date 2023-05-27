@@ -88,8 +88,9 @@
     <span>Post Delete</span></button></div>
 </div>
 {% endif %}
-<div class="out_centered" style="border-bottom: 1px black solid"></div>
+<div class="out_centered" style="border-bottom: 1px black solid; margin-bottom: 20px"></div>
 <div class="scrollable-div">
+<h2 style="text-align: center; margin-bottom: 10px">리스트</h2>
 {% for post_list in post.post_list.all %}
     <div class="container" style="margin-bottom: 30px">
     <a style="text-decoration: none; color: black; display: flex" href="{% url 'summer_spot:post_list' pk=pk pk2=post_list.id %}">
@@ -105,10 +106,11 @@
 {% endfor %}
 </div>
 {% if check_user == post.user.id %}
-    <div class="container">
+    <div class="container" style="margin-bottom: 10px">
 <button class="custom-btn btn-6"  onclick="location.href='{% url 'summer_spot:post_list_make' pk %}'">
     <span>List Make</span></button></div>
 {% endif %}
+<h2 style="text-align: center; margin-bottom: 10px; padding-top: 10px; border-top:1px black solid">댓글</h2>
 {% for post_review in post.post_review.all %}
 <div class="out_centered">
         <div class="container" style="width: 900px;
@@ -125,7 +127,7 @@
     </div>
 
                 </div>
-            {% if check_user == post.user.id %}
+            {% if check_user == post_review.user.id %}
             <div> <a style="text-decoration: none; color: black" href="{% url 'summer_spot:review_del' pk=pk pk2=post_review.id %}"><h3>X</h3></a></div>
             {% endif %}
             </div>
