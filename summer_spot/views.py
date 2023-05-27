@@ -280,7 +280,7 @@ class Post_list_make(APIView): # 포스트 리스트 삭제
         else:
             return Response(status=status.HTTP_200_OK, template_name='main/post_list_make.html',
                             data={"form": form, 'pk': pk})
-class Post_list_retouch(APIView): # 피드 리스트 수정
+class Post_list_retouch(APIView): # 피드 리스트 수정 asdasd
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request, pk, pk2):
