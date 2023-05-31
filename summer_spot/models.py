@@ -34,8 +34,11 @@ def delete_image_file(sender, instance, **kwargs):
 
 class Post_list(BaseModel): # 피드 리스트
     list_title = models.CharField(max_length=50)
-    list_content = models.CharField(max_length=50, blank=True)
+    list_content = models.CharField(max_length=500, blank=True)
     list_place = models.CharField(blank=True, max_length=50)
+    list_place_address = models.CharField(blank=True, max_length=50)
+    list_place_x = models.FloatField()
+    list_place_y = models.FloatField()
     list_image = models.ImageField(upload_to='list', null=True)
     DIVISION = (
         ('1', '편의 시설'),
@@ -58,9 +61,11 @@ class Post_list(BaseModel): # 피드 리스트
 
 
 class Post(BaseModel): # 피드
-    region = models.CharField(max_length=50, blank=True)  # 지역
-    place = models.CharField(max_length=50, blank=True)  # 주소
-    zip_code = models.CharField(max_length=50, blank=True)  # 우편 번호
+    region = models.CharField(max_length=50)  # 지역
+    place = models.CharField(max_length=50)  # 주소
+    place_address = models.CharField(max_length=50)
+    place_x = models.FloatField()
+    place_y = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True) # 작성자
     title_image = models.ImageField(upload_to='title', null=True) # 피드 이미지
     user_check = models.IntegerField(default=0) # 조회수

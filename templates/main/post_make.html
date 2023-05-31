@@ -27,14 +27,27 @@ width: 700px; display: block;"><label>설명</label>
 	</div>
     <div class="mb-3 container" style="width: 500px; display: block;">
             <label for="place"><p class="text-muted" style="margin: 0px; color: black; !important;">장소</p></label>
+        <div style="display : flex;">
             <input type="text" class="form-control" name="place" id="place"
                    placeholder="장소를 입력해 주세요"
                    value="{{ post.place.value|default_if_none:'' }}">
+        <input type="button" id="searchButton" value="Search">
+            </div>
         </div>
     <div id="map" class="container" style="width:250px;height:250px; display: none;"></div>
-    <label for="zip_code"><p class="text-muted" style="margin: 0px; color: black; !important;"></p></label>
-    <input type="text" class="container form-control" id="zip_code" name="zip_code" style="width: 470px; pointer-events: none;">
-
+    <div class="container">
+    <div id="addree_set" style="display: none;">
+    <label for="place_x"></label>
+    <input type="text" class="form-control" id="place_x" name="place_x" style="width: 150px; pointer-events: none; margin: 0"
+    value="{{ post.place_x.value|default_if_none:'' }}">
+    <label for="place_y"></label>
+    <input type="text" class="orm-control" id="place_y" name="place_y" style="width: 150px; pointer-events: none;margin: 0"
+    value="{{ post.place_y.value|default_if_none:'' }}">
+    <label for="place_address"></label>
+    <input type="text" class="form-control" id="place_address" name="place_address" style="width: 150px; pointer-events: none;margin: 0"
+    value="{{ post.place_address.value|default_if_none:'' }}">
+    </div>
+    </div>
     <div class="mb-3 container" style=" width: 500px; display: block; margin-top: 20px">
             <label for="title_image"><p class="text-muted" style="margin: 0px; color: black; !important;">이미지 첨부</p></label>
             <input type="file" class="form-control" name="title_image" id="title_image">
@@ -48,7 +61,7 @@ width: 700px; display: block;"><label>설명</label>
     <span>Make</span></button></div>
 </form>
 </div>
-<script  type="text/javascript" src="{% static '/js/map.js' %}"></script>
+<script  type="text/javascript" src="{% static '/js/text.js' %}"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	fe7ad61fd61d620b72278f6765994dc2&libraries=services"></script>
 </body>

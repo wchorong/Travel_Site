@@ -1,13 +1,89 @@
 <!DOCTYPE html>
+{% load static %}
+{% block content %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>날씨</title>
+    <link href="{% static 'weather-icons-master/css/weather-icons.min.css' %}" rel="stylesheet" />
+    <link href="{% static '/css/test.css' %}" rel="stylesheet" />
+    <link href="{% static '/css/set.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="{% static '/lion_2/css/style.css' %}">
 </head>
-<body>
-{{ weather }}
-{{ temp }}
-{{ uv }}
-{{ uv_max }}
+    <header>
+        <h1 class="logo"><a href="{% url 'summer_spot:post' pk %}">뒤로 가기</a></h1>
+
+        <button class="loginBtn" onclick="location.href='{% url 'user_set:login' %}'"><i class="bi bi-box-arrow-in-right" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Login</a></button>
+        <button class="registerBtn" onclick="location.href='./register.html'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Register</a></button>
+    </header>
+<body style="margin: 0; height: 800px">
+<video style="height: 800px; object-fit: fill; width: 100%; z-index: -1; position: absolute" src="{% static '/img/0001-0600.mp4' %}" autoplay muted loop
+    ></video>
+<div class="container myDiv" style="padding-top: 50px"><span
+    style="font-family: 'Noto Sans KR', sans-serif; font-weight: bold;font-size: 50px;">
+    {{ region }} 현재 날씨</span></div>
+<div class="container myContent" style="padding-bottom: 20px">
+    <span style="font-family: 'Noto Sans KR', sans-serif; font-weight: bold;font-size: 20px; padding-right: 20px">{{ now }}시 기준</span>
+<i class="wi wi-time-{{ now_icon }}" style="font-size: 50px; "></i></div>
+<div class="container">
+<div class="weather-forecast myContent_1"
+     style="width: 500px; height: 500px; border:3px black solid; border-radius: 15px; justify-content: start;
+background-color: rgba(255,255,255,0.3)">
+    <div class="container icon_move" style="height: 200px">
+    <i class="wi wi-{{ weather }}" style="font-size: 150px; "></i>
+        </div>
+    <div style="width: 100%; height: 300px; display: flex;">
+    <div style="height: 100%; width: 250px" class="container">
+  <div class="forecast-item">
+    <span class="forecast-date nums" data-count="{{ temp }}" style="font-size: 80px; font-weight: bold;">0</span>
+      <i class="wi wi-celsius" style="font-size: 80px; "></i>
+  </div>
+        </div>
+        <div style="height: 100%; width: 250px; display: block; padding-top: 70px">
+            <div class="forecast-item">
+                <div class="uv_set"><span class="uv_tooltip"><img src="{% static '/img/sunblock_02.png' %}"
+                                                                  style="width: 400px; height:600px;border-radius: 10px;
+                                                                    border: 2px black solid" alt=""></span>
+      <i class="wi wi-sunset" style="font-size: 40px; padding-right: 10px"></i>
+    <span class="forecast-date" style="font-size: 40px; font-weight: bold;" >{{ uv }}</span></div>
+  </div>
+  <div class="forecast-item">
+      <i class="wi wi-sunrise" style="font-size: 40px;padding-right: 10px"></i>
+    <span class="forecast-date" style="font-size: 40px; font-weight: bold;">{{ uv_max }}</span>
+  </div>
+            <div class="forecast-item">
+      <i class="wi wi-humidity" style="font-size: 40px;"></i>
+    <span class="forecast-date" style="font-size: 40px; font-weight: bold;">{{ cloud }}%</span>
+  </div>
+        </div>
+        </div>
+</div>
+    </div>
+<script type="text/javascript" src="{% static '/js/jquery-3.6.4.js' %}"></script>
+<script>
+        //숫자 카운트 애니메이션
+        setTimeout(function() {
+        $('.nums').each(function () {
+            const $this = $(this),
+                countTo = $this.attr('data-count');
+
+            $({
+                countNum: $this.text()
+            }).animate({
+                countNum: countTo
+            }, {
+                duration: 1500,
+                easing: 'linear',
+                step: function () {
+                    $this.text(Math.floor(this.countNum));
+                },
+                complete: function () {
+                    $this.text(this.countNum);
+                }
+            });
+        }); } ,2500);
+    </script>
 </body>
+{% endblock %}
 </html>

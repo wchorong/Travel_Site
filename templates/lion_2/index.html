@@ -34,34 +34,31 @@
             <span>가고 싶은 바다를</span><br />
             <span>찾아보세요!</span>
         </div>
-        <div class="searchboxWrap" style="background-color: rgba(255, 255, 255, 0.718); width: 27vw; padding: 10px; border-radius: 10px;">
+        <div class="searchboxWrap" style="background-color: rgba(255, 255, 255, 0.718);display: flex; width: 20vw; padding: 10px; border-radius: 10px;">
             <form method=POST action="{% url 'summer_spot:post_region' %}">
             <select name="searchbox" id="" onchange="categoryChange(this)" style="height: 5vh; width: 10vw; font-size: 19px; background-color: transparent;
             color: rgba(0, 0, 0, 0.853); border-style: none; border-bottom: 2px solid rgba(0, 0, 0, 0.642); font-weight: bold; padding-right: 20px;">
                 <option value="">시/도 선택</option>
-                <option value="서울">서울</option>
-                <option value="경기">경기</option>
+                <option value="서울특별시">서울특별시</option>
+                <option value="경기도">경기도</option>
                 <option value="인천광역시">인천광역시</option>
                 <option value="부산광역시">부산광역시</option>
                 <option value="대구광역시">대구광역시</option>
                 <option value="대전광역시">대전광역시</option>
                 <option value="광주광역시">광주광역시</option>
                 <option value="울산광역시">울산광역시</option>
-                <option value="강원">강원</option>
-                <option value="충북">충북</option>
-                <option value="충남">충남</option>
-                <option value="경북">경북</option>
-                <option value="경남">경남</option>
-                <option value="전북">전북</option>
-                <option value="전남">전남</option>
-                <option value="제주">제주</option>
-            </select>
-            <select name="searchbox2" id="state" style="height: 5vh; width: 10vw; font-size: 19px; background-color: transparent;
-            color: rgba(0, 0, 0, 0.853); border-style: none; border-bottom: 2px solid rgba(0, 0, 0, 0.642); font-weight: bold;">
-                <option>군/구 선택</option>
+                <option value="강원도">강원도</option>
+                <option value="충청북도">충청북도</option>
+                <option value="충청남도">충청남도</option>
+                <option value="경상북도">경상북도</option>
+                <option value="경상남도">경상남도</option>
+                <option value="전라북도">전라북도</option>
+                <option value="전라남도">전라남도</option>
+                <option value="제주도">제주도</option>
             </select>
             <button class="searchBtn"><i class="bi bi-search" style="font-size: 20px; color: white; width: 5px; height: 5px"></i></button>
             </form>
+            <button class="searchBtn" onclick="location.href='{% url 'summer_spot:main_page' %}'"><span style="font-size: 25px; color: white">X</span></button>
         </div>
         <video class="mainMP4" src="/media/oceanMP4.mp4" autoplay muted loop></video>
     </mp4Container>
@@ -91,11 +88,12 @@
                                     </div>
                                     <div class="name-profession">
                                         <span class="name">{{ post.title}}</span>
-                                        <span class="profession">{{ post.place }}</span>
+                                        <span class="profession">{{ post.place_address }}</span>
                                     </div>
             
                                     <div class="command">
-                                        <p>수정 예정</p>
+                                        <p>{{ post.get_ambience_display}} | {{ post.get_personnel_display}} |
+                                            {{ post.get_view_display}} | {{ post.get_good_place_display}} | {{ post.get_rental_item_display}}</p>
                                     </div>
             
                                     <div class="button">

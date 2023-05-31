@@ -19,7 +19,7 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 var geocoder = new kakao.maps.services.Geocoder();
 
 // 주소로 좌표를 검색합니다
-geocoder.addressSearch(data.address, function(result, status) {
+geocoder.addressSearch('해운대', function(result, status) {
 
     // 정상적으로 검색이 완료됐으면
      if (status === kakao.maps.services.Status.OK) {

@@ -1,3 +1,4 @@
+import html
 from collections import Counter
 from itertools import groupby
 
@@ -14,12 +15,15 @@ from .models import Post
 from user_set.models import User, User_Categories
 from lion_project import settings
 import requests
+from datetime import datetime
 
 
 class Post_make(APIView): # 휴양지 피드 만들기
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request):
         user_check = request.session.get('user')
+        if user_check is None:
+            return redirect('user_set:login')
         if user_check is None:
             return redirect('user_set:login')
         post = Post_Serializer()
@@ -188,7 +192,7 @@ class Select_post(APIView): # 선택한 피드
                                                                                          'review': review_set,
                                                                                          'check_user': check_user})
 
-class Weather(APIView):
+class Weather(APIView): # 날씨
     renderer_classes = [TemplateHTMLRenderer]
     def get(self, request, pk):
         check_user = request.session.get('user')
@@ -196,25 +200,45 @@ class Weather(APIView):
             return redirect('user_set:login')
         post = Post.objects.get(id=pk)
         API_key = settings.WEATHER_API_KEY
-        zip_code = post.zip_code
-        url = f'http://api.openweathermap.org/geo/1.0/zip?zip={zip_code},KR&appid={API_key}&lang=kr'
-        response = requests.get(url)
-        lat, lon = response.json()['lat'], response.json()['lon']
+        region = post.place_address.split()
+        region = f'{region[0]} {region[1]}'
+        lat, lon = post.place_y, post.place_x
         url = f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API_key}'
         response = requests.get(url)
         weather_set = response.json()
-        weather, temp = weather_set['weather'][0]['main'], weather_set['main']['temp']
-        UV_API = settings.UVI_API_KEY
-        url = f'https://api.openuv.io/api/v1/uv?lat={lat}&lng={lon}'
-        headers = {'x-access-token': UV_API}
-        response = requests.get(url, headers=headers)
-        uv_data = response.json()
-        uv, uv_max = uv_data['result']['uv'], uv_data['result']['uv_max']
-        print(uv, uv_max, weather, temp)
+        weather, temp, cloud = weather_set['weather'][0]['main'], int(weather_set['main']['temp']), weather_set['clouds']['all']
+        # weather, temp, cloud = 'Rain', 18, 100
+        # UV_API = settings.UVI_API_KEY
+        # url = f'https://api.openuv.io/api/v1/uv?lat={lat}&lng={lon}'
+        # headers = {'x-access-token': UV_API}
+        # response = requests.get(url, headers=headers)
+        # uv_data = response.json()
+        # uv, uv_max = int(uv_data['result']['uv']), int(uv_data['result']['uv_max'])
+        uv, uv_max = 0, 8
+        now = datetime.now().time().hour
+        weather = weather.lower()
+        if weather == 'clear':
+            if 18 < now < 8:
+                weather = 'night-clear'
+            else:
+                weather = 'day-sunny'
+        elif weather == 'drizzle':
+            weather = 'sleet'
+        elif weather == 'Squall':
+            weather = 'cloudy-windy'
+        elif weather == 'mist' and 'smoke' and 'haze' and 'dust':
+            weather = 'fog'
+        now_icon = now
+        if now > 12:
+            now_icon = now-12
         return Response(status=status.HTTP_200_OK, template_name='main/weather.html', data={"uv": uv, 'pk': pk,
-                                                                                         'uv_max': uv_max,
-                                                                                         'weather': weather,
-                                                                                            'temp': temp})
+                                                                                            'uv_max': uv_max,
+                                                                                            'weather': weather,
+                                                                                            'cloud': cloud,
+                                                                                            'temp': temp,
+                                                                                            'region': region,
+                                                                                            'now': now,
+                                                                                            'now_icon': now_icon,})
 class Review_make(APIView): # 댓글 생성
     renderer_classes = [TemplateHTMLRenderer]
 
@@ -309,7 +333,7 @@ class Post_list_make(APIView): # 포스트 리스트 삭제
         else:
             return Response(status=status.HTTP_200_OK, template_name='main/post_list_make.html',
                             data={"form": form, 'pk': pk})
-class Post_list_retouch(APIView): # 피드 리스트 수정 asdasd
+class Post_list_retouch(APIView): # 피드 리스트 수정
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request, pk, pk2):
@@ -327,7 +351,7 @@ class Post_list_retouch(APIView): # 피드 리스트 수정 asdasd
         if post_list_check.is_valid():
             post_list_check.save()
             print("asdasdas")
-            return redirect('summer_spot:post', pk)
+            return redirect('summer_spot:post_list', pk, pk2)
         else:
             return Response(status=status.HTTP_200_OK, template_name='main/post_list_retouch.html',
                             data={"form": post_list_check, 'pk': pk, 'pk2': pk2})
@@ -337,6 +361,8 @@ class Post_list(APIView): # 선택한 피드 리스트
     def get(self, request, pk, pk2):
         post = Post.objects.get(id=pk)
         post_list = post.post_list.get(id=pk2)
+        # output_text = post_list.list_content.replace('\n', '<br>')
+        # output_text = html.escape(output_text)
         return Response(status=status.HTTP_200_OK, template_name='main/post_list.html',
                         data={"post_list": post_list, 'pk': pk, 'pk2': pk2})
 
