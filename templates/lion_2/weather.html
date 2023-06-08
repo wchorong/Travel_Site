@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>날씨 정보 페이지</title>
+    <link rel="stylesheet" href="{% static '/lion_2/css/weather.css' %}">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header>
+        <h1 class="logo"><a href="{% url 'summer_spot:main_page' %}">likelion</a></h1>
+        <div class="menu">
+            <ul>
+                <li><a href="{% url 'summer_spot:weather_search' %}">날씨</a></li>
+                <li><a href="{% url 'summer_spot:post_search' %}">키워드기반검색</a></li>
+            </ul>
+        </div>
+        <button class="loginBtn" onclick="location.href='{% url 'user_set:login' %}'"><i class="bi bi-box-arrow-in-right" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Login</a></button>
+        <button class="registerBtn" onclick="location.href='{% url 'user_set:user_retouch' %}'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Edit</a></button>
+    </header>
+    <div class="weatherWrap">
+        <p class="date">날씨를 검색해보세요!</p>   
+        <p class="name">현재 온도는?</p>
+        <p class="weatherDetail"></p>
+        <p class="temperatures"></p>
+        <img class="weatherIcon" src="{% static '/lion_2/assets/img/weatherIcon.png' %}" alt="">
+        <div class="blurWrap">
+            <div class="detail_blur1"></div>
+            <div class="wind"><p style="width: 4vw;">바람<p class="windValue">#</p></div>
+        </div>
+        <div class="blurWrap2">
+            <div class="detail_blur2"></div>
+            <div class="UV-rays_Mean"><p>평균<br>자외선 지수<br><p class="UV-rays_Mean_Value"></p>#</p></div>
+        </div>
+        <div class="blurWrap3">
+            <div class="detail_blur3"></div>
+            <div class="UV-rays_Max"><p>최대<br>자외선 지수<br><p class="UV-rays_Max_Value"></p>#</p></div>
+        </div>
+    </div>
+    <div class="weatherSearchWrap">
+        <input type="text" id="search" placeholder="지역을 입력해주세요!" onkeyup="enterkey()">
+    </div>
+    <button class="weatherSearchBTN"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="currentColor" class="bi bi-search"
+        viewBox="0 0 16 13">
+        <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+    </svg></button>
+</body>
+<script>
+const apiKey = "7d71a0fb6923ce3b24b7407ce94ad0cd";
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+const searchBox = document.querySelector(".weatherSearchWrap input");
+const searchBtn = document.querySelector(".weatherSearchBTN");
+const weather_Icon = document.querySelector(".weatherIcon");
+
+
+async  function checkWeather(city){
+    const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+    var data = await response.json();
+    console.log(data);
+    document.querySelector(".name").innerHTML = data.name;
+    document.querySelector(".temperatures").innerHTML = Math.round(data.main.temp) + "°C";
+    document.querySelector(".windValue").innerHTML = data.wind.speed + "km/h";
+    document.querySelector(".weatherDetail").innerHTML = data.weather[0].description;
+
+    if(data.weather[0].main === "Clouds"){
+        weather_Icon.src = "{% static '/lion_2/assets/img/Cloud.png' %}";
+    }
+    else if(data.weather[0].main === "Clear"){
+        weather_Icon.src = "{% static '/lion_2/assets/img/Sun.png' %}";
+    }
+    else if (data.weather[0].main === "Rain") {
+        weather_Icon.src = "{% static '/lion_2/assets/img/Cloud angled rain.png' %}";
+    }
+    else if (data.weather[0].main === "Snow") {
+        weather_Icon.src = "{% static '/lion_2/assets/img/Big snow little snow.png' %}";
+    }
+    else if (data.weather[0].main === "Thunderstorm") {
+        weather_Icon.src = "{% static '/lion_2/assets/img/Cloud 3 zap.png' %}";
+    }
+    else if (data.weather[0].main === "Mist") {
+        weather_Icon.src = "{% static '/lion_2/assets/img/Slow winds.png' %}";
+    }
+    
+
+
+}
+
+searchBtn.addEventListener("click", ()=>{
+    checkWeather(searchBox.value);
+})
+
+function enterkey() {
+	if (window.event.keyCode == 13) {
+    	checkWeather(searchBox.value);
+    }
+}
+
+</script>
+{% endblock %}
+</html>

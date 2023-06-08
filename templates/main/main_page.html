@@ -1,14 +1,61 @@
 <!DOCTYPE html>
-{% extends "base.html" %}
 {% load static %}
 {% block content %}
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>Main</title>
+    <link rel="stylesheet" href="{% static '/lion_2/css/style.css' %}">
+<link href="{% static 'css/set.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/butten.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/post_image.css' %}" rel="stylesheet" />
 </head>
 <body>
-{% include "filter_bar.html" %}
+<header>
+        <h1 class="logo"><a href="{% url 'summer_spot:main_page' %}" style="color: black;">likelion</a></h1>
+        <div class="menu">
+            <ul>
+                <li><a href="{% url 'summer_spot:weather_search' %}" style="color: black; font-weight: bold;">날씨</a></li>
+                <li><a href="{% url 'summer_spot:post_search' %}" style="color: black; font-weight: bold;">키워드기반검색</a></li>
+            </ul>
+        </div>
+        <button class="loginBtn" onclick="location.href='{% url 'user_set:login' %}"><i class="bi bi-box-arrow-in-right"
+                style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Login</a></button>
+        <button class="registerBtn" onclick="location.href='{% url 'user_set:user_retouch' %}'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Edit</a></button>
+    </header>
+<div class="container" style="margin-top: 100px; align-items: normal; margin-bottom:50px ">
+<div class="container" style="border-radius: 10px; align-items: normal; border:2px black solid">
+<div style="display: block; text-align: center; width: 200px">
+<h2>분위기</h2>
+{% for mood in mood_key %}
+    <div>
+{{ mood }}
+    </div>
+{% endfor %}
+</div>
+<div style="display: block; text-align: center; width: 200px">
+<h2>인원</h2>
+{% for personnel in personnel_key %}
+    <div>
+        {{ personnel }}</div>
+{% endfor %}
+</div>
+<div style="display: block; text-align: center; width: 200px">
+<h2>놀거리</h2>
+{% for leisure in leisure_key %}
+    <div>
+        {{ leisure }}</div>
+{% endfor %}
+</div>
+<div style="display: block; text-align: center; width: 200px">
+<h2>대여 물품</h2>
+{% for rental_item in rental_item_key %}
+    <div>
+        {{ rental_item }}</div>
+{% endfor %}
+</div>
+</div>
+</div>
 <div id="result"></div>
 {% for post in post %}
     {% for post in post %}
@@ -22,10 +69,9 @@
     <div style="width: 480px; height: 250px;">
         <div style="margin-bottom: 50px; margin-top: 10px"><h2>{{ post.title}}</h2></div>
         <div style="margin-bottom: 50px; display: flex">
-        <h4 style="border-radius: 5px">{{ post.get_ambience_display}}</h4>
+        <h4 style="border-radius: 5px">{{ post.get_mood_display}}</h4>
             <h4 style="border-radius: 5px; margin-left: 10px">{{ post.get_personnel_display}}</h4>
-            <h4 style="border-radius: 5px; margin-left: 10px">{{ post.get_view_display}}</h4>
-            <h4 style="border-radius: 5px; margin-left: 10px">{{ post.get_good_place_display}}</h4>
+            <h4 style="border-radius: 5px; margin-left: 10px">{{ post.get_leisure_display}}</h4>
         <h4 style="border-radius: 5px; margin-left: 10px">{{ post.get_rental_item_display}}</h4>
             </div>
         <div style="padding-top: 20px">
@@ -37,10 +83,6 @@
         </div>
 {% endfor %}
 {% endfor %}
-<div class="out_centered" style="margin-top: 50px">
-<button class="custom-btn btn-6"  onclick="location.href='{% url 'summer_spot:post_make' %}'">
-    <span>Make Post</span></button>
-</div>
 </body>
 {% endblock %}
 </html>

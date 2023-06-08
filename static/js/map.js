@@ -3,6 +3,7 @@ window.onload = function(){
         //카카오 지도 발생
         new daum.Postcode({
             oncomplete: function(data) { //선택시 입력값 세팅
+                document.getElementById("zip_code").value = data.zonecode;
                 document.getElementById("place").value = data.address; // 주소 넣기
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
@@ -18,7 +19,7 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 var geocoder = new kakao.maps.services.Geocoder();
 
 // 주소로 좌표를 검색합니다
-geocoder.addressSearch(data.address, function(result, status) {
+geocoder.addressSearch('해운대', function(result, status) {
 
     // 정상적으로 검색이 완료됐으면
      if (status === kakao.maps.services.Status.OK) {

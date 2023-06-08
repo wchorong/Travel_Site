@@ -12,11 +12,26 @@
 <body>
 {% include "list_make_bar.html" %}
 <h1 style="text-align: center;">리스트 작성</h1>
+{% if error %}
+<div style="color: red; width: 100%; justify-content: center; align-items: center; display: flex">
+<div style="border: 2px black solid; width: 400px; text-align: center; border-radius: 10px">
+    {% for errors in error %}
+        <div style="width: 100%; justify-content: center; align-items: center; display: flex">
+        {% for error in errors %}
+            <div style="margin: 5px">
+    <span>{{ error }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
 <form method=POST  name="review_form" id="review_form" action="{% url 'summer_spot:post_list_retouch' pk pk2%}" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mb-3 container">
-        <label for="rental_item">리스트 구분:</label>
-        <select type="text" id="rental_item" name="division" class="search_select">
+        <label for="division">리스트 구분:</label>
+        <select type="text" id="division" name="division" class="search_select">
             <option value="">전체</option>
             <option value="1">편의시설</option>
             <option value="2">맛집</option>
@@ -25,18 +40,35 @@
         </select>
     </div>
     <div class="mb-3 container" style="width: 500px; display: block; margin-top: 20px">
-            <label for="list_title"><p class="text-muted" style="margin: 0px; color: black; !important;">제목</p></label>
+            <label for="list_title"><p class="text-muted" style="margin: 0px; color: black; !important;">가게 이름</p></label>
             <input type="text" class="form-control" name="list_title" id="list_title"
                    placeholder="장소를 입력해 주세요"
                    value="{{ form.list_title.value|default_if_none:'' }}">
         </div>
-    <div class="mb-3 container" style="width: 500px; display: block; margin-top: 20px">
-            <label for="title"><p class="text-muted" style="margin: 0px; color: black; !important;">장소</p></label>
+    <div class="mb-3 container" style="width: 500px; display: block;">
+            <label for="place"><p class="text-muted" style="margin: 0px; color: black; !important;">장소</p></label>
+        <div style="display : flex;">
             <input type="text" class="form-control" name="list_place" id="place"
                    placeholder="장소를 입력해 주세요"
                    value="{{ form.list_place.value|default_if_none:'' }}">
+        <input type="button" id="searchButton" value="Search">
+            </div>
         </div>
     <div id="map" class="container" style="width:250px;height:250px; display: none;"></div>
+    <div class="container">
+    <div id="addree_set" style="display: none">
+    <label for="list_place_x"></label>
+    <input type="text" class="form-control" id="place_x" name="list_place_x" style="width: 150px; pointer-events: none; margin: 0"
+    value="{{ form.list_place_x.value|default_if_none:'' }}">
+    <label for="list_place_y"></label>
+    <input type="text" class="orm-control" id="place_y" name="list_place_y" style="width: 150px; pointer-events: none;margin: 0"
+    value="{{ form.list_place_y.value|default_if_none:'' }}">
+    <label for="list_place_address"></label>
+    <input type="text" class="form-control" id="place_address" name="list_place_address" style="width: 150px; pointer-events: none;margin: 0"
+    value="{{ form.list_place_address.value|default_if_none:'' }}">
+    </div>
+    </div>
+
     <div class="mb-3 container" style=" width: 500px; display: block; margin-top: 20px">
             <label for="list_image"><p class="text-muted" style="margin: 0px; color: black; !important;">이미지 첨부</p></label>
             <input type="file" class="form-control" name="list_image" id="list_image">
@@ -51,7 +83,20 @@
     <button type="submit" class="custom-btn btn-6">작 성</button>
         </div>
 </form>
-<script  type="text/javascript" src="{% static '/js/map.js' %}"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var selectElement = document.getElementById('division');
+    var existingValue = '{{ form.division.value }}'; // 기존 값이 무엇인지 예시로 설정합니다.
+
+    for (var i = 0; i < selectElement.options.length; i++) {
+      if (selectElement.options[i].value === existingValue) {
+        selectElement.options[i].selected = true;
+        break;
+      }
+    }
+  });
+</script>
+<script  type="text/javascript" src="{% static '/js/text.js' %}"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	fe7ad61fd61d620b72278f6765994dc2&libraries=services"></script>
 </body>

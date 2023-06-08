@@ -6,26 +6,95 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link href="{% static 'css/set.css' %}" rel="stylesheet" />
     <link href="{% static 'css/butten.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static '/lion_2/css/login.css' %}">
+    <link rel="stylesheet" href="{% static '/lion_2/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
-<body>
-{% include "sign_bar.html" %}
-<div class="container" style="margin-top: 30px; margin-bottom: 50px" ><h1 style="text-align: center">회원가입</h1></div>
+<body class="container" style="background-color: #ECEFF7; align-items: normal; height: auto">
+<header style="margin-bottom: 100px">
+        <h1 class="logo"><a href="{% url 'user_set:login' %}" style="color: black">likelion</a></h1>
+        <div class="menu">
+        </div>
+    </header>
+<div class="R-container container" style="display: block; margin-top: 35px">
+    <div style="padding-top: 70px">
+            <h1 style="display: flex; justify-content: center; align-items: center; margin: 10px; ">Create an account</h1>
+            <p style="display: flex; justify-content: center; align-items: center; color: darkgrey; padding-bottom: 40px;"> Sign up
+                now and unlock exclusive access!</p></div>
+    {% if error %}
+<div style="color: red; width: 100%; justify-content: center; align-items: center; display: flex">
+<div style="border: 2px black solid; width: 400px; text-align: center; border-radius: 10px">
+    {% for errors in error %}
+        <div style="width: 100%; justify-content: center; align-items: center; display: flex">
+        {% for error in errors %}
+            <div style="margin: 5px">
+    <span>{{ error }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
 <form method=POST action="{% url 'user_set:nickname_set' %}">
     {% csrf_token %}
-    <div class="mb-3 container" style="width: 400px; display: block;">
-    {% render_form form template_pack='rest_framework/vertical' %}
+    <div class="inputWrap" style="text-align: center">
+                    <input type="text" id="usernickname" placeholder="닉네임" name="nickname">
+                </div>
+        <div class="tag" style="margin-top: 50px;font-size: 25px;text-align: center">
+            <h5> 🎇 선호하는 여행 태그를 선택해주세요! 😆</h5></div>
+        <div class="container select-wrapper" style="text-align: center; padding-top: 20px;">
+    <select name="mood" style="width: 150px; text-align: center">
+                    <option value="">분위기</option>
+                    <option value="1">신선한</option>
+                    <option value="2">자연적인</option>
+                    <option value="3">사진 찍기 좋은</option>
+                    <option value="4">조용한</option>
+                    <option value="5">멋진</option>
+                    <option value="6">왁자지껄한</option>
+                    <option value="7">사람이 적은</option>
+                    <option value="8">새로운</option>
+                    <option value="9">호화로운</option>
+                    <option value="10">야경이 멋진</option>
+                    <option value="11">고즈넉한</option>
+                </select>
+                <select name="personnel" style="width: 150px; text-align: center">
+                    <option value="">여행 인원</option>
+                    <option value="1">1인 여행</option>
+                    <option value="2">2인 여행</option>
+                    <option value="3">3인 여행</option>
+                    <option value="4">4인 여행</option>
+                    <option value="5">5인 이상</option>
+                    <option value="6">단체 여행</option>
+                </select>
+                <select name="leisure" style="width: 150px; text-align: center">
+                    <option value="">놀거리</option>
+                    <option value="1">빠지</option>
+                    <option value="2">다이빙</option>
+                    <option value="3">스쿠버</option>
+                    <option value="4">캠핑</option>
+                    <option value="5">해변 활동</option>
+                    <option value="6">서핑</option>
+                    <option value="7">수영</option>
+                    <option value="8">모터보트</option>
+                </select>
+                <select name="rental_item" style="width: 150px; text-align: center">
+                    <option value="">대여가능물품</option>
+                    <option value="1">수영복</option>
+                    <option value="2">튜브</option>
+                    <option value="3">오리발</option>
+                    <option value="4">파라솔</option>
+                    <option value="5">돗자리(매트)</option>
+                    <option value="6">서핑 보드</option>
+                    <option value="7">비치 베드</option>
+                </select>
         </div>
-        <div><h2 style="text-align: center; margin-bottom: 20px">태그 지정</h2></div>
-        <div class="mb-3 container" style="text-align: center;">
-    {% render_form form_Categories template_pack='rest_framework/vertical' %}
-        </div>
-    <div style="margin-bottom: 20px; text-align: center">
-        <button class="custom-btn btn-6" type="submit">
-    <span>Sign</span></button></div>
+    <div style="padding-top: 80px; text-align: center" class="container">
+         <button type="submit" class="confirmBTN3">회원가입</button></div>
 </form>
+</div>
 </body>
 {% endblock %}
 </html>

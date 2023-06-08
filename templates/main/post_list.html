@@ -6,48 +6,74 @@
     <meta charset="UTF-8">
     <title>List</title>
     <script>
-      var start = "{{ post_list.list_place }}";
+      var start_x = "{{ post_list.list_place_x }}";
+      var start_y = "{{ post_list.list_place_y }}";
     </script>
 <link href="{% static 'css/set.css' %}" rel="stylesheet" />
     <link href="{% static 'css/butten.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="{% static '/lion_2/css/style.css' %}">
 </head>
-<body>
-{% include "list_make_bar.html" %}
-<h1 style="text-align: center; margin-bottom: 50px">{{ post_list.get_division_display }}</h1>
-<div class="out_centered" style="margin-bottom: 20px">
-        <div class="container" style="padding: 8px; margin-left: 50px">
+<body style="margin: 0; padding: 0">
+{% if post_list.get_division_display == '맛집' %}
+<img style="height: 250px; object-fit: cover; width: 100%; z-index: -1; position: absolute" src="{% static '/img/jay-wennington-N_Y88TWmGwA-unsplash.jpg' %}"
+     alt="">
+{% elif post_list.get_division_display == '편의 시설' %}
+    <img style="height: 250px; object-fit: cover; width: 100%; z-index: -1; position: absolute" src="{% static '/img/sanibell-bv-mFQo2uJNf2c-unsplash.jpg' %}"
+     alt="">
+{% elif post_list.get_division_display == '놀거리' %}
+    <img style="height: 250px; object-fit: cover; width: 100%; z-index: -1; position: absolute" src="{% static '/img/lacie-slezak-7yqyQQXgOT8-unsplash.jpg' %}"
+     alt="">
+{% elif post_list.get_division_display == '볼거리' %}
+    <img style="height: 250px; object-fit: cover; width: 100%; z-index: -1; position: absolute" src="{% static '/img/chris-galbraith-7XAM0J3dNQM-unsplash.jpg' %}"
+     alt="">
+{% endif %}
+ <header>
+        <h1 class="logo"><a href="{% url 'summer_spot:post' pk %}">뒤로 가기</a></h1>
 
-               <div><div id='maps' style="width: 350px; height: 200px"></div>
-               </div>
+        <button class="loginBtn" onclick="location.href='{% url 'user_set:login' %}'"><i class="bi bi-box-arrow-in-right" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Login</a></button>
+     <button class="registerBtn" onclick="location.href='{% url 'user_set:user_retouch' %}'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Edit</a></button>
+    </header>
+<div class="container" style="padding-top: 30px; padding-bottom: 60px">
+<span style="text-align: center; font-size: 100px; font-weight: bold;color:white">{{ post_list.get_division_display }}</span></div>
+<div class="out_centered" style="margin-bottom: 50px; padding-top: 50px">
+    <div style="height: 800px; width: 1000px;
+    ; z-index: -1">
+        <div class="container" style="padding-bottom: 120px;">
+                <img class="postList-box postList_Content" src="{{ post_list.list_image.url }}"
+                                         style="border-radius: 15px; width: 500px; height: 350px;border:2px black solid;">
 
-    <div style="width: 400px;padding-left: 100px">
-        <div style="margin-bottom: 50px; padding-top: 30px"><h2>{{ post_list.list_title}}</h2></div>
-        <div>
-        <h3>{{ post_list.list_place}}</h3>
+    <div style="width: 400px; height:350px;padding-left: 100px">
+        <div class="postList_Content" style="margin-bottom: 15px; text-align: center"><span style="font-size: 50px; font-weight: bold;">{{ post_list.list_title}}</span></div>
+        <div class="postList_Content_1">
+            <pre style="white-space: pre-wrap;"><span style="font-size: 18px; font-weight: bold;word-wrap: break-word;">{{ post_list.list_content }}</span></pre>
             </div>
         <div style="padding-top: 50px">
             </div>
     </div>
         </div>
-        </div>
-<div class="out_centered" style="margin-bottom: 20px">
-<div class="container" style="margin-left: 50px">
-    <div><img src="{{ post_list.list_image.url }}"
-                                         style="border-radius: 15px; width: 350px; height: 250px"></img>
-    </div>
+
+<div class="container postList_Content_2" style="margin-left: 50px">
+    <div><div id='maps' style="width: 350px; height: 300px;border-radius: 10px">
+    </div></div>
         <div style="width: 400px;padding-left: 100px">
         <div>
-        <h3>{{ post_list.list_content}}</h3>
+        <span style="font-size: 30px; font-weight: bold;">{{ post_list.list_place_address}}</span>
             </div>
         <div style="padding-top: 50px">
             </div>
     </div>
         </div>
+        </div>
 </div>
+{% if user_check == 1 %}
 <div class="out_centered">
-    <button class="custom-btn btn-6" onclick="location.href='{% url 'summer_spot:post_list_retouch' pk=pk pk2=post_list.id %}'">
+    <button style="margin-right: 10px" class="custom-btn btn-6" onclick="location.href='{% url 'summer_spot:post_list_retouch' pk=pk pk2=post_list.id %}'">
     <span>수정</span></button>
+    <button style="margin-left: 10px" class="custom-btn btn-6"onclick="location.href='{% url 'summer_spot:post_list_del' pk=pk pk2=post_list.id %}'">
+    <span>삭제</span></button>
 </div>
+{% endif %}
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	fe7ad61fd61d620b72278f6765994dc2&libraries=services"></script>
 <script  type="text/javascript" src="{% static '/js/post_map.js' %}"></script>
