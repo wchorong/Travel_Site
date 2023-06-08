@@ -1,74 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>키워드 추천 페이지</title>
-    <link rel="stylesheet" href="./css/keyword.css">
+    <link rel="stylesheet" href="{% static '/lion_2/css/keyword.css' %}">
+    <link rel="stylesheet" href="{% static 'css/set.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>키워드 기반 추천 서비스</h1>
+    <header>
+        <h1 class="logo"><a href="{% url 'summer_spot:main_page' %}" style="color: black;">likelion</a></h1>
+        <button class="loginBtn" onclick="location.href='{% url 'user_set:login' %}'"><i class="bi bi-box-arrow-in-right"
+                style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Login</a></button>
+        <button class="registerBtn" onclick="location.href='{% url 'user_set:user_retouch' %}'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Edit</a></button>
+    </header>
+    <h1 class="highlight">키워드 기반 추천 서비스</h1>
     <p>원하는 키워드들을 선택해주세요!</p>
-    <marquee class = "marquee1" scrolldelay=100" behavior="alternate" direction="left">
-        <div class="chips-container">
-            <button class="chips" id="ambience">신선한</button>
-            <button class="chips" id="person">1인</button>
-            <button class="chips" id="rental_item">튜브 대여</button>
-            <button class="chips" id="view">자연적인</button>
-            <button class="chips" id="good_place">수상레저 활동이 가능한</button>
-            <button class="chips" id="theme">자유여행</button>
-            <button class="chips" id="rental_item">수영복</button>
-            <button class="chips" id="theme">이색체험</button>
-            <button class="chips" id="location">남해</button>
+    <form method=POST action="{% url 'summer_spot:post_search' %}">
+            {% csrf_token %}
+    <div class="keywordWrap" style="padding-top: 100px">
+        <div>
+            <div style="width: 350px; text-align: center">
+            <label for="mood_box" class="legend_set">분위기</label>
+            </div>
+        <div class="out_checkbox_set container" id = mood_box
+             style="margin-right: 60px; margin-bottom: 30px; text-align: center; align-items: normal">
+            <div style="width: 300px;">
+            <div class="boxWrap boxWrap1 boxWrap1" onclick="toggleCheckbox('mood_1')">
+                <input type="checkbox" id="mood_1" class="mood" name="mood" value="1">
+                <label for="mood" id="mood" class="checkbox_label">신선한</label>
+            </div>
+
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_2')">
+                <input type="checkbox" id="mood_2" class="mood" name="mood" value="2">
+                <label for="mood_2" id="mood" class="checkbox_label">자연적인</label>
+            </div>
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_3')">
+                <input type="checkbox" id="mood_3" class="mood" name="mood" value="3">
+                <label for="mood_3" id="mood" class="checkbox_label">사진 찍기 좋은</label>
+            </div>
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_4')">
+                <input type="checkbox" id="mood_4" class="mood" name="mood" value="4">
+                <label for="mood_4" id="mood" class="checkbox_label">조용한</label>
+            </div>
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_5')">
+                <input type="checkbox" id="mood_5" class="mood" name="mood" value="5">
+                <label for="mood_5" id="mood" class="checkbox_label">멋진</label>
+            </div>
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_6')">
+                <input type="checkbox" id="mood_6" class="mood" name="mood" value="6">
+                <label for="mood_6" id="mood" class="checkbox_label">왁자지껄한</label>
+            </div>
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_7')">
+                <input type="checkbox" id="mood_7" class="mood" name="mood" value="7">
+                <label for="mood_7" id="mood" class="checkbox_label">사람이 적은</label>
+            </div>
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_8')">
+                <input type="checkbox" id="mood_8" class="mood" name="mood" value="8">
+                <label for="mood_8" id="mood" class="checkbox_label">새로운</label>
+            </div>
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_9')">
+                <input type="checkbox" id="mood_9" class="mood" name="mood" value="9">
+                <label for="mood_9" id="mood" class="checkbox_label">호화로운</label>
+            </div>
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_10')">
+                <input type="checkbox" id="mood_10" class="mood" name="mood" value="10">
+                <label for="mood_10" id="mood" class="checkbox_label">야경이 멋진</label>
+            </div>
+            <div class="boxWrap boxWrap1" onclick="toggleCheckbox('mood_11')">
+                <input type="checkbox" id="mood_11" class="mood" name="mood" value="11">
+                <label for="mood_11" id="mood" class="checkbox_label">고즈넉한</label>
+            </div>
+            </div>
         </div>
-    </marquee>
-    <marquee class = "marquee2"scrolldelay="40" behavior="alternate" direction="right">
-        <br><br><br><br>
-        <div class="chips-container">
-            <button class="chips" id="view">사진 찍기 좋은</button>
-            <button class="chips" id="theme">식도락 여행</button>
-            <button class="chips" id="person">2인</button>
-            <button class="chips" id="ambience">조용한</button>
-            <button class="chips" id="view">멋진</button>
-            <button class="chips" id="location">서해</button>
-            <button class="chips" id="good_place">맛집이 많은</button>
-            <button class="chips" id="theme">우정</button>
-            <button class="chips" id="theme">사랑</button>
-            <button class="chips" id="ambience">평화로운</button>
-            <button class="chips" id="ambience">왁자지껄한</button>
+            <div style="width: 350px; text-align: center">
+            <label for="personnel_box" class="legend_set">인원</label>
+            </div>
+        <div class="out_checkbox_set container"
+             style="margin-right: 60px; text-align: center;">
+            <div style="width: 300px;">
+            <div class="boxWrap boxWrap2" id="personnel_box" onclick="toggleCheckbox('personnel_1')">
+                <input type="checkbox" class="personnel" id="personnel_1" name="personnel" value="1">
+                <label for="personnel_1" id="personnel" class="checkbox_label">1인 여행</label>
+            </div>
+            <div class="boxWrap boxWrap2" onclick="toggleCheckbox('personnel_2')">
+                <input type="checkbox" class="personnel" id="personnel_2" name="personnel" value="2">
+                <label for="personnel_2" id="personnel" class="checkbox_label">2인 여행</label>
+            </div>
+            <div class="boxWrap boxWrap2" onclick="toggleCheckbox('personnel_3')">
+                <input type="checkbox" class="personnel" id="personnel_3" name="personnel" value="3">
+                <label for="personnel_3" id="personnel" class="checkbox_label">3인 여행</label>
+            </div>
+            <div class="boxWrap boxWrap2" onclick="toggleCheckbox('personnel_4')">
+                <input type="checkbox" class="personnel" id="personnel_4" name="personnel" value="4">
+                <label for="personnel_4" id="personnel" class="checkbox_label">4인 여행</label>
+            </div>
+            <div class="boxWrap boxWrap2" onclick="toggleCheckbox('personnel_5')">
+                <input type="checkbox" class="personnel" id="personnel_5" name="personnel" value="5">
+                <label for="personnel_5" id="personnel" class="checkbox_label">5인 이상</label>
+            </div>
+            <div class="boxWrap boxWrap2" onclick="toggleCheckbox('personnel_6')">
+                <input type="checkbox" class="personnel" id="personnel_6" name="personnel" value="6">
+                <label for="personnel_6" id="personnel" class="checkbox_label">단체 여행</label>
+            </div>
+            </div>
         </div>
-    </marquee>
-    <marquee  class = "marquee3"scrolldelay="30" behavior="alternate" direction="right">
-        <br><br><br><br>
-        <div class="chips-container">
-            <button class="chips" id="person">3인</button>
-            <button class="chips" id="view">사람이 적은</button>
-            <button class="chips" id="good_place">물놀이</button>
-            <button class="chips" id="good_place">다이빙</button>
-            <button class="chips" id="person">4인 이상</button>
-            <button class="chips" id="theme">휴식</button>
-            <button class="chips" id="theme">체험</button>
-            <button class="chips" id="rental_item">매트 및 파라솔 대여</button>
-            <button class="chips" id="theme">가성비</button>
-            <button class="chips" id="theme">호화로운</button>
+            </div>
+        <div>
+            <div style="width: 350px; text-align: center">
+            <label for="leisure_box" class="legend_set">놀거리</label>
+            </div>
+        <div class="out_checkbox_set container" id="leisure_box"
+             style="margin-bottom: 30px; text-align: center; align-items: normal">
+            <div style="width: 300px;">
+            <div class="boxWrap boxWrap3" onclick="toggleCheckbox('leisure_1')">
+                <input type="checkbox" class="leisure" id="leisure_1" name="leisure" value="1">
+                <label for="leisure_1" id="leisure" class="checkbox_label">빠지</label>
+            </div>
+            <div class="boxWrap boxWrap3" onclick="toggleCheckbox('leisure_2')">
+                <input type="checkbox" class="leisure" id="leisure_2" name="leisure" value="2">
+                <label for="leisure_2" id="leisure" class="checkbox_label">다이빙</label>
+            </div>
+            <div class="boxWrap boxWrap3" onclick="toggleCheckbox('leisure_3')">
+                <input type="checkbox" class="leisure" id="leisure_3" name="leisure" value="3">
+                <label for="leisure_3" id="leisure" class="checkbox_label">스쿠버</label>
+            </div>
+            <div class="boxWrap boxWrap3" onclick="toggleCheckbox('leisure_4')">
+                <input type="checkbox" class="leisure" id="leisure_4" name="leisure" value="4">
+                <label for="leisure_4" id="leisure" class="checkbox_label">캠핑</label>
+            </div>
+            <div class="boxWrap boxWrap3" onclick="toggleCheckbox('leisure_5')">
+                <input type="checkbox" class="leisure" id="leisure_5" name="leisure" value="5">
+                <label for="leisure_5" id="leisure" class="checkbox_label">해변 활동</label>
+            </div>
+            <div class="boxWrap boxWrap3" onclick="toggleCheckbox('leisure_6')">
+                <input type="checkbox" class="leisure" id="leisure_6" name="leisure" value="6">
+                <label for="leisure_6" id="leisure" class="checkbox_label">서핑</label>
+            </div>
+            <div class="boxWrap boxWrap3" onclick="toggleCheckbox('leisure_7')">
+                <input type="checkbox" class="leisure" id="leisure_7" name="leisure" value="7">
+                <label for="leisure_7" id="leisure" class="checkbox_label">수영</label>
+            </div>
+            <div class="boxWrap boxWrap3" onclick="toggleCheckbox('leisure_8')">
+                <input type="checkbox" class="leisure" id="leisure_8" name="leisure" value="8">
+                <label for="leisure_8" id="leisure" class="checkbox_label">모터보트</label>
+            </div>
+            </div>
         </div>
-    </marquee>
-    <marquee class="marquee4" scrolldelay="35" behavior="alternate" direction="right">
-        <br><br><br><br>
-        <div class="chips-container">
-            <button class="chips" id="good_place">캠핑</button>
-            <button class="chips" id="good_place">해변</button>
-            <button class="chips" id="view">야경이 멋진</button>
-            <button class="chips" id="location">동해</button>
-            <button class="chips" id="good_place">서핑</button>
-            <button class="chips" id="good_place">수영</button>
-            <button class="chips" id="rental_item">수영복 대여</button>
-            <button class="chips" id="rental_item">오리발 대여</button>
-            <button class="chips" id="ambience">고즈넉한</button>
-            <button class="chips" id="theme">가족</button>
+            <div style="width: 350px; text-align: center">
+            <label for="rental_item_box" class="legend_set">대여가능물품</label>
+            </div>
+        <div class="out_checkbox_set container" id="rental_item_box"
+             style="text-align: center; align-items: normal">
+            <div style="width: 300px;">
+            <div class="boxWrap boxWrap4" onclick="toggleCheckbox('rental_item_1')">
+                <input type="checkbox" class="rental_item" id="rental_item_1" name="rental_item" value="2">
+                <label for="rental_item_1" id="rental_item" class="checkbox_label">튜브</label>
+            </div>
+            <div class="boxWrap boxWrap4" onclick="toggleCheckbox('rental_item_2')">
+                <input type="checkbox" class="rental_item" id="rental_item_2" name="rental_item" value="1">
+                <label for="rental_item_2" id="rental_item" class="checkbox_label">수영복</label>
+            </div>
+            <div class="boxWrap boxWrap4" onclick="toggleCheckbox('rental_item_3')">
+                <input type="checkbox" class="rental_item" id="rental_item_3" name="rental_item" value="4">
+                <label for="rental_item_3" id="rental_item" class="checkbox_label">파라솔</label>
+            </div>
+            <div class="boxWrap boxWrap4" onclick="toggleCheckbox('rental_item_4')">
+                <input type="checkbox" class="rental_item" id="rental_item_4" name="rental_item" value="5">
+                <label for="rental_item_4" id="rental_item" class="checkbox_label">돗자리(매트)</label>
+            </div>
+            <div class="boxWrap boxWrap4" onclick="toggleCheckbox('rental_item_5')">
+                <input type="checkbox" class="rental_item" id="rental_item_5" name="rental_item" value="3">
+                <label for="rental_item_5" id="rental_item" class="checkbox_label">오리발</label>
+            </div>
+            <div class="boxWrap boxWrap4" onclick="toggleCheckbox('rental_item_6')">
+                <input type="checkbox" class="rental_item" id="rental_item_6" name="rental_item" value="6">
+                <label for="rental_item_6" id="rental_item" class="checkbox_label">서핑 보드</label>
+            </div>
+            <div class="boxWrap boxWrap4" onclick="toggleCheckbox('rental_item_7')">
+                <input type="checkbox" class="rental_item" id="rental_item_7" name="rental_item" value="7">
+                <label for="rental_item_7" id="rental_item" class="checkbox_label">비치 베드</label>
+            </div>
         </div>
-    </marquee>
-    <button class="search">검색하기</button>
+        </div>
+            </div>
+        <button type="submit" class="saveBTN">여행지 찾기!</button>
+    </div>
+</form>
+<script>
+    function toggleCheckbox(checkboxId) {
+      var checkbox = $('#' + checkboxId);
+      var boxWrap = checkbox.parent('.boxWrap');
+      if (checkbox.prop('checked')) {
+        checkbox.prop('checked', false);
+        boxWrap.removeClass('checked');
+      } else {
+        checkbox.prop('checked', true);
+        boxWrap.addClass('checked');
+      }
+    }
+  </script>
+
 </body>
+{% endblock %}
 </html>

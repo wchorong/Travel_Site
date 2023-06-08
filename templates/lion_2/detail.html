@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% block content %}
+<head>
+<script>
+      var start_x = "{{ post.place_x }}";
+      var start_y = "{{ post.place_y }}";
+    </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상세페이지</title>
+    <link rel="stylesheet" href="{% static '/lion_2/css/detail.css' %}">
+    <link rel="stylesheet" href="{% static '/lion_2/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/set.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+    <link href="{% static 'css/butten.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <!-- 헤더 -->
+    <header>
+        <h1 class="logo"><a href="{% url 'summer_spot:main_page' %}" style="color: black;">likelion</a></h1>
+        <div class="menu">
+            <ul>
+                <li><a href="{% url 'summer_spot:weather_search' %}" style="color: black; font-weight: bold;">날씨</a></li>
+                <li><a href="{% url 'summer_spot:post_search' %}" style="color: black; font-weight: bold;">키워드기반검색</a></li>
+            </ul>
+        </div>
+         <button class="loginBtn" onclick="location.href='{% url 'user_set:login' %}'"><i class="bi bi-box-arrow-in-right" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Login</a></button>
+        <button class="registerBtn" onclick="location.href='{% url 'user_set:user_retouch' %}'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Edit</a></button>
+    </header>
+    {% if check_user == 1 %}
+        <div style="position: relative; left: 60%; top:10%; width: 500px" class="container">
+    <div style="position: absolute;"><button class="custom-btn btn-6" onclick="toggleContent()">관리자 설정</button></div>
+    <div id="admin_set" class="container" style="background-color: #5e5e5e; top: 30px">
+        <div style="display:block;">
+            <div style="margin: 5px">
+            <button class="custom-btn btn-6" id="open-modal-btn">
+    <span>ADD Image</span></button></div>
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>사진을 넣어주세요</h2>
+        <form method=POST action="{% url 'summer_spot:many_image' pk %}" enctype="multipart/form-data">
+    {% csrf_token %}
+        <div class="mb-3">
+            <label for="images"><p class="text-muted" style="margin: 0px; color: paleturquoise !important;">이미지 첨부</p></label>
+            <input type="file" class="form-control" name="images" id="images">
+        </div>
+            <div class="mb-3">
+            <label for="images_name"><p class="text-muted" style="margin: 0px; color: paleturquoise !important;">이미지 제목</p></label>
+            <input type="text" class="form-control" name="images_name" id="images_name">
+        </div>
+            <button type="submit" class="btn btn-primary" style="color: black">MAKE</button>
+        </form>
+    </div>
+  </div>
+           <div style="margin: 5px"><button class="custom-btn btn-6" onclick="location.href='{% url 'summer_spot:post_retouch' pk %}'">
+               <span>Re-touch</span></button></div>
+            <div style="margin: 5px"><button class="custom-btn btn-6"  onclick="location.href='{% url 'summer_spot:post_del' pk %}'">
+    <span>Post Delete</span></button></div>
+        <div style="margin: 5px"><button class="custom-btn btn-6" onclick="location.href='{% url 'summer_spot:post_list_make' pk %}'">
+    <span>List Make</span></button></div>
+        </div>
+    </div>
+        </div>
+        </body>
+    {% endif %}
+    <h2 class="name">{{ post.title }}</h2>
+    <p class="location">{{ post.place_address}}</p>
+    <p class="intro"><span class="highlight">{{ post.sub_title }}</span></p>
+
+    <!-- 슬라이드쇼 컨테이너 -->
+    <div class="slideshow-container">
+    
+        <!-- 숫자와 캡션이 있는 이미지 -->
+        {% for image in post.post_image.all %}
+        <div class="mySlides fade">
+            <div class="numbertext">{{ image.images_name }}
+            <button class="close-button" onclick="location.href='{% url 'summer_spot:post_image_del' pk=pk pk2=image.id %}'">
+    <span>X</span></button></div>
+
+            <img src="{{ image.images.url }}" style="width:100%" alt="">
+        </div>
+        {% endfor %}
+        
+        <!-- 다음, 이전 이미지 버튼 -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    <br>
+    
+    <!-- 현재 이미지를 알려주는 하단의 점 -->
+    <div style="text-align:center">
+        {% for count in count %}
+        <span class="dot" onclick="currentSlide({{ count }})"></span>
+        {% endfor %}
+    </div>
+
+    <div class="descriptionWrap">
+        <p style="margin: 10px; font-size: 25px; font-weight: bold;">상세정보</p></div>
+        <div class="description container">
+            <div style="display: block; width: 80vw">
+            <span class="highlight2" style="font-weight: bold; font-size: 20px">* {{ post.sub_title }}</span>
+            <br>
+            <pre style="white-space: pre-wrap;"><span style="font-weight: bold;word-wrap: break-word;">{{ post.content }}</span></pre></div></div>
+    
+    <!-- 지도 마커 -->
+    <div class="container">
+        <div class="mapcontent container" id="maps" style="width: 300px; height: 300px">
+        <div id="maps">
+        </div>
+            </div>
+
+        <div class="container" style="width: 40vw; height: 40vh;
+         border-radius: 30px; justify-content: normal; margin-left: 50px;">
+            <div style="margin-left: 70px">
+            <div class="infoWrap" style="display: flex">
+                <p style="font-weight: bold; font-size: 20px">🔎 문의 및 안내</p>
+                <p class="detailInfo" style="font-size: 20px">{{ post.number }}</p>
+            </div>
+            <div class="infoWrap" style="display: flex">
+                <p style="font-weight: bold; font-size: 20px">📍 주소</p>
+                <p class="detailInfo" style="font-size: 20px">{{ post.place_address }}</p>
+            </div>
+                <div class="infoWrap" style="display: flex">
+                    <p style="font-weight: bold; font-size: 20px">⛅ 날씨</p>
+                <button class="close-button detailInfo" style="font-size: 20px; color: black"
+                        onclick="location.href='{% url 'summer_spot:weather' pk=pk%}'">{{ post.place_address }} 날씨</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+    <!-- 댓글 -->
+    <div class="container" style="margin-top:80px">
+    <div class="commentWrap" style="display: block">
+    <div style="display: flex; margin-bottom: 20px">
+        <p style="font-size: 25px; font-weight: bold;">여행후기</p><p style="font-size: 20px; font-weight: lighter; margin-top: 5px; color: rgb(0, 89, 255);">(댓글수)</p>
+    </div>
+
+        <div class="writeCommentWrap" style="display: block">
+            <form method=POST  name="review_form" id="review_form" action="{% url 'summer_spot:review_make' pk%}" enctype="multipart/form-data">
+    {% csrf_token %}
+            <div class="container">
+            <textarea class="writeComment"placeholder="📝여행 후기를 간단하게 남겨주세요!" name="comment"></textarea>
+            </div>
+            <div class="container">
+            <div style="width: 75vw; overflow: hidden; margin-top: 30px">
+            <div class="star" style="float: left; display: flex">
+                <fieldset class="rate">
+                    <input type="radio" id="rating10"  name="like" value="5"><label for="rating10" title="5점"></label>
+                    <input type="radio" id="rating9" name="like" value="4.5"><label class="half" for="rating9" title="4.5점"></label>
+                    <input type="radio" id="rating8" name="like" value="4"><label for="rating8" title="4점"></label>
+                    <input type="radio" id="rating7" name="like" value="3.5"><label class="half" for="rating7" title="3.5점"></label>
+                    <input type="radio" id="rating6" name="like" value="3"><label for="rating6" title="3점"></label>
+                    <input type="radio" id="rating5" name="like" value="2.5"><label class="half" for="rating5" title="2.5점"></label>
+                    <input type="radio" id="rating4" name="like" value="2"><label for="rating4" title="2점"></label>
+                    <input type="radio" id="rating3" name="like" value="1.5"><label class="half" for="rating3" title="1.5점"></label>
+                    <input type="radio" id="rating2" name="like" value="1"><label for="rating2" title="1점"></label>
+                    <input type="radio" id="rating1" name="like" value="0.5"><label class="half" for="rating1" title="0.5점"></label>
+                </fieldset>
+            </div>
+                <div style="float: right">
+            <button type="submit" class="writeBTN">댓글작성 및 별점등록</button>
+                </div>
+                </div>
+                </div>
+                </form>
+        </div>
+        <div class="card-body" style="margin-top: 15px">
+            {% for post_review in post.post_review.all %}
+            <div class="readComment" {% if forloop.counter <= 3 %}style="display: block;" {% else %}style="display: none;"{% endif %}>
+            {% if check_user == 1 %}
+                <div style="float: right"><a style="text-decoration: none; color: black" href="{% url 'summer_spot:review_del' pk=pk pk2=post_review.id %}">
+                    <h3>X</h3></a></div>
+                {% endif %}
+                <div class="user">{{ post_review.user}}</div>
+                <div style="margin-bottom: 10px"> <span class="star_set" style="font-size: 20px">&#9733;</span>  {{ post_review.like }}</div>
+            <div><span>{{ post_review.comment}}</span></div>
+            </div>
+            {% endfor %}
+        <div class="container">
+    <button class="moreComments" onclick="showAllComments()">댓글 더보기 +</button></div>
+        </div>
+    </div>
+    </div>
+    <div class="container" style="margin-top: 80px">
+    <div style="display: block; width: 78vw">
+        <div>
+     <h2 class="goodPlace">💖 {{ post.title }} 주변 핫플레이스 👍</h2></div>
+    <div class="scroll">
+    <div class="gridWrap">
+        {% for post_list in post.post_list.all %}
+        <div class="post_list_img">
+        <a style="text-decoration: none; display: block; width: 100%; height: 100%" href="{% url 'summer_spot:post_list' pk=pk pk2=post_list.id %}">
+        <img src="{{ post_list.list_image.url }}" alt="" style="width: 100%; height: 100%">
+        <div class="overlay" style="margin: 0"></div>
+            <div class="post_list_content" style="text-align: center; margin: 0">
+                <br>
+                <h3 style="margin-bottom: 20px; font-size: 30px;">{{ post_list.list_title }}</h3>
+                <p style="font-size: 30px; margin-bottom: 25px;">{{ post_list.get_division_display }}</p>
+                <p>📍 {{ post_list.list_place_address }}</p>
+            </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+    </div>
+    </div>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	fe7ad61fd61d620b72278f6765994dc2&libraries=services"></script>
+    <script  type="text/javascript" src="{% static '/js/post_map.js' %}"></script>
+<script>
+    var slideIndex = 1;
+showSlides(slideIndex);
+
+// 다음, 이전 제어
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// 사진 제어
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1} 
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none"; 
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block"; 
+  dots[slideIndex-1].className += " active";
+}
+</script>
+    <script>
+        function showAllComments() {
+            var comments = document.getElementsByClassName("readComment");
+            for (var i = 0; i < comments.length; i++) {
+                comments[i].style.display = "block";
+            }
+           document.getElementsByClassName("moreComments")[0].style.display = "none";
+        }
+    </script>
+<script>
+        function toggleContent() {
+  var content = document.getElementById("admin_set");
+  if (content.style.display === "none") {
+    content.style.display = "block";
+  } else {
+    content.style.display = "none";
+  }
+}
+    </script>
+<script type="text/javascript" src="{% static '/js/modal.js' %}"></script>
+</body>
+{% endblock %}
+</html>

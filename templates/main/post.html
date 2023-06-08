@@ -6,7 +6,8 @@
 <head>
     <title>Post</title>
     <script>
-      var start = "{{ post.place }}";
+      var start_x = "{{ post.place_x }}";
+      var start_y = "{{ post.place_y }}";
     </script>
 </head>
 <body>
@@ -70,7 +71,7 @@
                </div>
 
     <div style="width: 400px;padding-left: 100px">
-        <div style="margin-bottom: 50px; padding-top: 30px"><h2>{{ post.title}}</h2></div>
+        <div style="margin-bottom: 50px; padding-top: 30px"><h2>{{ post.place_address}}</h2></div>
         <div>
         <h3>{{ post.content}}</h3>
             </div>
@@ -96,7 +97,7 @@
     <a style="text-decoration: none; color: black; display: flex" href="{% url 'summer_spot:post_list' pk=pk pk2=post_list.id %}">
 <h3 style="width: 100px; text-align: center">{{ post_list.get_division_display }}</h3>
         <h3 style="width: 200px; text-align: center; margin-left: 30px">{{ post_list.list_title }}</h3>
-        <h3 style="width: 300px; text-align: center">{{ post_list.list_place }}</h3>
+        <h3 style="width: 300px; text-align: center">{{ post_list.list_place_address }}</h3>
         </a>
         {% if check_user == post.user.id %}
     <button class="close-button" onclick="location.href='{% url 'summer_spot:post_list_del' pk=pk pk2=post_list.id %}'">
@@ -157,6 +158,9 @@
 
     <button type="submit" class="custom-btn btn-6">작 성</button>
 </form>
+</div>
+<div class="out_centered" style="margin-bottom: 20px;">
+<button class="close-button" onclick="location.href='{% url 'summer_spot:weather' pk=pk%}'">날씨</button>
 </div>
 </body>
 {% endblock %}

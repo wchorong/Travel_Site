@@ -11,6 +11,21 @@
 </head>
 <body>
 <div class="container" ><h1 style="text-align: center">피드 작성</h1></div>
+{% if error %}
+<div style="color: red; width: 100%; justify-content: center; align-items: center; display: flex">
+<div style="border: 2px black solid; width: 400px; text-align: center; border-radius: 10px">
+    {% for errors in error %}
+        <div style="width: 100%; justify-content: center; align-items: center; display: flex">
+        {% for error in errors %}
+            <div style="margin: 5px">
+    <span>{{ error }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
 <div style="margin-left: 20px; margin-right: 20px;">
 <form method=POST action="{% url 'summer_spot:post_retouch' pk %}" enctype="multipart/form-data">
     {% csrf_token %}
@@ -20,6 +35,12 @@
                    placeholder="제목을 입력해 주세요"
                    value="{{ post.title.value|default_if_none:'' }}">
         </div>
+    <div class="mb-3 container" style="width: 500px; display: block;">
+            <label for="sub_title"><p class="text-muted" style="margin: 0px; color: black; !important;">소 제목</p></label>
+            <input type="text" class="form-control" name="sub_title" id="sub_title"
+                   placeholder="제목을 입력해 주세요"
+                   value="{{ post.sub_title.value|default_if_none:'' }}">
+        </div>
     <div class="container" style="margin-bottom: 15px; margin-top: 15px;
 width: 700px; display: block;"><label>설명</label>
 		<textarea class="col-auto form-control" type="text" id="reviewContents" name="content"
@@ -27,28 +48,112 @@ width: 700px; display: block;"><label>설명</label>
 	</div>
     <div class="mb-3 container" style="width: 500px; display: block;">
             <label for="place"><p class="text-muted" style="margin: 0px; color: black; !important;">장소</p></label>
+        <div style="display : flex;">
             <input type="text" class="form-control" name="place" id="place"
                    placeholder="장소를 입력해 주세요"
                    value="{{ post.place.value|default_if_none:'' }}">
+        <input type="button" id="searchButton" value="Search">
+            </div>
         </div>
-    <div id="map" class="container" style="width:250px;height:250px; display: none;"></div>
-
+    <div id="map" class="container" style="width:250px;height:250px; display: none"></div>
+    <div class="container">
+    <div id="addree_set" style="display: none">
+    <label for="place_x"></label>
+    <input type="text" class="form-control" id="place_x" name="place_x" style="width: 150px; pointer-events: none; margin: 0"
+    value="{{ post.place_x.value|default_if_none:'' }}">
+    <label for="place_y"></label>
+    <input type="text" class="orm-control" id="place_y" name="place_y" style="width: 150px; pointer-events: none;margin: 0"
+    value="{{ post.place_y.value|default_if_none:'' }}">
+    <label for="place_address"></label>
+    <input type="text" class="form-control" id="place_address" name="place_address" style="width: 150px; pointer-events: none;margin: 0"
+    value="{{ post.place_address.value|default_if_none:'' }}">
+    </div>
+    </div>
     <div class="mb-3 container" style=" width: 500px; display: block; margin-top: 20px">
             <label for="title_image"><p class="text-muted" style="margin: 0px; color: black; !important;">이미지 첨부</p></label>
             <input type="file" class="form-control" name="title_image" id="title_image">
         </div>
+    <div class="mb-3 container" style="width: 500px; display: block;">
+            <label for="number"><p class="text-muted" style="margin: 0px; color: black; !important;">문의 번호</p></label>
+            <input type="text" class="form-control" name="number" id="number"
+                   placeholder="제목을 입력해 주세요"
+                   value="{{ post.number.value|default_if_none:'' }}">
+        </div>
     <div><h1 style="text-align: center">피드 태그</h1></div>
-    <div class="mb-3 container" style="text-align: center;">
-    {% render_form post_cat template_pack='rest_framework/vertical' %}
-    </div>
+    <div class="container select-wrapper" style="text-align: center; padding-top: 20px;">
+    <select name="mood" style="width: 150px; text-align: center">
+                    <option value="">분위기</option>
+                    <option value="1">신선한</option>
+                    <option value="2">자연적인</option>
+                    <option value="3">사진 찍기 좋은</option>
+                    <option value="4">조용한</option>
+                    <option value="5">멋진</option>
+                    <option value="6">왁자지껄한</option>
+                    <option value="7">사람이 적은</option>
+                    <option value="8">새로운</option>
+                    <option value="9">호화로운</option>
+                    <option value="10">야경이 멋진</option>
+                    <option value="11">고즈넉한</option>
+                </select>
+                <select name="personnel" style="width: 150px; text-align: center">
+                    <option value="">여행 인원</option>
+                    <option value="1">1인 여행</option>
+                    <option value="2">2인 여행</option>
+                    <option value="3">3인 여행</option>
+                    <option value="4">4인 여행</option>
+                    <option value="5">5인 이상</option>
+                    <option value="6">단체 여행</option>
+                </select>
+                <select name="leisure" style="width: 150px; text-align: center">
+                    <option value="">놀거리</option>
+                    <option value="1">빠지</option>
+                    <option value="2">다이빙</option>
+                    <option value="3">스쿠버</option>
+                    <option value="4">캠핑</option>
+                    <option value="5">해변 활동</option>
+                    <option value="6">서핑</option>
+                    <option value="7">수영</option>
+                    <option value="8">모터보트</option>
+                </select>
+                <select name="rental_item" style="width: 150px; text-align: center">
+                    <option value="">대여가능물품</option>
+                    <option value="1">수영복</option>
+                    <option value="2">튜브</option>
+                    <option value="3">오리발</option>
+                    <option value="4">파라솔</option>
+                    <option value="5">돗자리(매트)</option>
+                    <option value="6">서핑 보드</option>
+                    <option value="7">비치 베드</option>
+                </select>
+        </div>
     <div style="margin-bottom: 20px; text-align: center">
         <button class="custom-btn btn-6" type="submit">
     <span>Make</span></button></div>
 </form>
 </div>
-<script  type="text/javascript" src="{% static '/js/map.js' %}"></script>
+<script  type="text/javascript" src="{% static '/js/text.js' %}"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	fe7ad61fd61d620b72278f6765994dc2&libraries=services"></script>
+<script>
+    // 백엔드에서 받은 값을 가져옵니다.
+    var moodValue = "{{ post.mood.value }}"; // 예시로 "4"라는 값이 전달되었다고 가정합니다.
+    var personnelValue = "{{post.personnel.value}}";
+    var leisureValue = "{{post.leisure.value}}";
+    var rentalItemValue = "{{post.rental_item.value}}";
+
+    // select 요소의 옵션들을 반복하면서 선택 여부를 확인합니다.
+    // 분위기 셀렉트 박스에서 해당 값에 맞는 옵션을 선택합니다.
+    document.getElementsByName("mood")[0].value = moodValue;
+
+    // 여행 인원 셀렉트 박스에서 해당 값에 맞는 옵션을 선택합니다.
+    document.getElementsByName("personnel")[0].value = personnelValue;
+
+    // 놀거리 셀렉트 박스에서 해당 값에 맞는 옵션을 선택합니다.
+    document.getElementsByName("leisure")[0].value = leisureValue;
+
+    // 대여가능물품 셀렉트 박스에서 해당 값에 맞는 옵션을 선택합니다.
+    document.getElementsByName("rental_item")[0].value = rentalItemValue;
+</script>
 </body>
 {% endblock %}
 </html>

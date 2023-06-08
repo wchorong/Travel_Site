@@ -28,3 +28,32 @@
   padding: 0 30px;
 }
 #nav3 ul,ol{list-style:none}
+*{padding:0;margin:0}
+.center{
+    text-align: center;
+    text-decoration:none;color:#fff;font-size:15px
+}
+#nav_weather {
+  overflow:hidden;height:50px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+}
+#nav_weather .left {
+    text-decoration:none;color:#fff;
+  line-height: 80px;
+  display: block;
+  font-size: 30px;
+  font-weight: 900;
+  position: absolute;
+  left: 30px;
+}
+#nav_weather ul {
+  display: inline-block;
+}
+#nav_weather ul li {
+  float: left;
+  line-height: 80px;
+  padding: 0 30px;
+}
+#nav_weather ul,ol{list-style:none}

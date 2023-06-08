@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>login</title>
-    <link rel="stylesheet" href="/css/login.css">
-    
+    <link rel="stylesheet" href="{% static '/lion_2/css/login_re.css' %}">
+    <link rel="stylesheet" href="{% static '/lion_2/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
-<body>
+<body style="height: auto">
+    <header style="margin-bottom: 100px">
+        <h1 class="logo"><a href="{% url 'user_set:login' %}" style="color: black">likelion</a></h1>
+        <div class="menu">
+        </div>
+        <button style="right: 10%" class="registerBtn" onclick="location.href='{% url 'user_set:nickname_set' %}'">
+            <i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Register</a></button>
+    </header>
     <div class="container">
         <div class="l-div">
-            <img src="/assets/img/loginIMG.png" alt="" style="height: 100%; width: 100%; border-top-left-radius: 15px;">
+            <img src="{% static '/lion_2/assets/img/loginIMG.png' %}" alt="" style="height: 100%; width: 100%; border-top-left-radius: 15px;">
         </div>
         <div class="r-div">
             <div class="emoji">
@@ -23,19 +33,19 @@
             </div>
             <div class="mainFuncContainer">
                 <h1 class="hello">Hello Again!</h1>
+                <form method=POST action="{% url 'user_set:login' %}">
+                    {% csrf_token %}
                 <div class="s-container">
                     <div class="inputForm">
-                        <input type="email" id="userEmail" placeholder="이메일">
+                        <input type="text" id="userEmail"  name="nickname" placeholder="이메일">
                         <label for="userEmail">닉네임</label>
                     </div>
-                    <div class="inputForm">
-                        <input type="password" id="userPW" placeholder="비밀번호">
-                        <label for="userPW">비밀번호</label>
-                    </div>
                     <button onclick="" class="confirmBTN">로그인</button>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </body>
+{% endblock %}
 </html>
