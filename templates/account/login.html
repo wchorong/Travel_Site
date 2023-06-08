@@ -8,8 +8,16 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link href="{% static 'css/set.css' %}" rel="stylesheet" />
     <link href="{% static 'css/butten.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static '/lion_2/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body>
+<header style="margin-bottom: 100px">
+        <h1 class="logo"><a href="{% url 'user_set:login' %}" style="color: black">likelion</a></h1>
+        <div class="menu">
+        </div>
+    <button class="registerBtn" onclick="location.href='{% url 'user_set:nickname_set' %}'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Register</a></button>
+    </header>
 <h1 style="text-align: center; margin-top: 100px">로그인</h1>
 <form method=POST action="{% url 'user_set:login' %}">
     {% csrf_token %}

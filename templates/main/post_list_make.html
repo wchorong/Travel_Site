@@ -12,17 +12,33 @@
 <body>
 {% include "list_make_bar.html" %}
 <h1 style="text-align: center;">리스트 작성</h1>
+{% if error %}
+<div style="color: red; width: 100%; justify-content: center; align-items: center; display: flex">
+<div style="border: 2px black solid; width: 400px; text-align: center; border-radius: 10px">
+    {% for errors in error %}
+        <div style="width: 100%; justify-content: center; align-items: center; display: flex">
+        {% for error in errors %}
+            <div style="margin: 5px">
+    <span>{{ error }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
 <form method=POST  name="review_form" id="review_form" action="{% url 'summer_spot:post_list_make' pk%}" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mb-3 container">
-        <label for="rental_item">리스트 구분:</label>
-        <select type="text" id="rental_item" name="division" class="search_select">
+        <div style="display: block"><div style="text-align: center;"><label for="rental_item">리스트 구분</label></div>
+       <div> <select type="text" id="rental_item" name="division" class="search_select">
             <option value="">전체</option>
             <option value="1">편의시설</option>
             <option value="2">맛집</option>
             <option value="3">볼거리</option>
             <option value="4">놀거리</option>
-        </select>
+        </select></div>
+            </div>
     </div>
     <div class="mb-3 container" style="width: 500px; display: block; margin-top: 20px">
             <label for="list_title"><p class="text-muted" style="margin: 0px; color: black; !important;">제목</p></label>

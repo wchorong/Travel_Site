@@ -8,36 +8,46 @@ class BaseModel(models.Model):
         abstract = True
 class User(BaseModel):
     nickname = models.CharField(unique=True, max_length=50, verbose_name="닉네임") # 닉네임
-    region = models.CharField(max_length=50, blank=True, verbose_name="희망 지역(예: 서울, 충남)")  # 지역
-    def __str__(self):
-        return self.nickname
-
-class User_Categories(BaseModel): # 카테고리
-    AMBIENCE = (
+    MOOD = (
         ('1', '신선한'),
-        ('2', '조용한'),
-        ('3', '왁자지껄한'),)
-    ambience = models.CharField(verbose_name='분위기', max_length=1, choices=AMBIENCE, blank=True,)
+        ('2', '자연적인'),
+        ('3', '사진 찍기 좋은'),
+        ('4', '조용한'),
+        ('5', '멋진'),
+        ('6', '왁자지껄한'),
+        ('7', '사람이 적은'),
+        ('8', '새로운'),
+        ('9', '호화로운'),
+        ('10', '야경이 멋진'),
+        ('11', '고즈넉한'),)
+    mood = models.CharField(verbose_name='분위기', max_length=2, choices=MOOD, blank=True)
     PERSONNEL = (
-        ('1', '혼자'),
-        ('2', '둘이'),
-        ('3', '셋이'),
-        ('4', '여러 명이'),)
-    personnel = models.CharField(verbose_name='인원', max_length=1, choices=PERSONNEL, blank=True)
-    VIEW = (
-        ('1', '자연적인'),
-        ('2', '사진 찍기 좋은'),)
-    view = models.CharField(verbose_name='풍경', max_length=1, choices=VIEW, blank=True)
-    GOOD_PLACE = (
+        ('1', '1인 여행'),
+        ('2', '2인 여행'),
+        ('3', '3인 여행'),
+        ('4', '4인 여행'),
+        ('5', '5인 여행'),
+        ('6', '단체 여행'),)
+    personnel = models.CharField(verbose_name='여행 인원', max_length=1, choices=PERSONNEL, blank=True)
+    LEISURE = (
         ('1', '빠지'),
-        ('2', '맛집이 많은'),
-        ('3', '물놀이'),
-        ('4', '다이빙 장소'),)
-    good_place = models.CharField(verbose_name='놀 거리', max_length=1, choices=GOOD_PLACE, blank=True)
+        ('2', '다이빙'),
+        ('3', '스쿠버'),
+        ('4', '캠핑'),
+        ('5', '해변 활동'),
+        ('6', '서핑'),
+        ('7', '수영'),
+        ('8', '모터보트'),)
+    leisure = models.CharField(verbose_name='놀거리', max_length=1, choices=LEISURE, blank=True)
     RENTAL_ITEM = (
         ('1', '수영복'),
         ('2', '튜브'),
         ('3', '오리발'),
-        ('4', '매트'),)
+        ('4', '파라솔'),
+        ('5', '돗자리(매트)'),
+        ('6', '서핑 보드'),
+        ('7', '비치 베드'),)
     rental_item = models.CharField(verbose_name='대여 물품', max_length=1, choices=RENTAL_ITEM, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.nickname
+

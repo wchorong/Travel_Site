@@ -15,7 +15,8 @@
         <h1 class="logo"><a href="{% url 'summer_spot:post' pk %}">뒤로 가기</a></h1>
 
         <button class="loginBtn" onclick="location.href='{% url 'user_set:login' %}'"><i class="bi bi-box-arrow-in-right" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Login</a></button>
-        <button class="registerBtn" onclick="location.href='./register.html'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Register</a></button>
+    <button class="registerBtn" onclick="location.href='{% url 'user_set:user_retouch' %}'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Edit</a></button>
+
     </header>
 <body style="margin: 0; height: 800px">
 <video style="height: 800px; object-fit: fill; width: 100%; z-index: -1; position: absolute" src="{% static '/img/0001-0600.mp4' %}" autoplay muted loop

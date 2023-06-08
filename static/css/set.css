@@ -183,5 +183,65 @@
 .postList-box {
   box-shadow: 0 15px 20px rgba(0, 0, 0, 0.7);
 }
+.select-wrapper {
+  position: relative;
+}
 
+.select-wrapper::after {
+  font-family: "FontAwesome", serif;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
 
+.select-wrapper select {
+  appearance: none;
+  padding: 8px 10px 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 200px;
+}
+
+/* 스타일링을 원하는 경우 아래의 추가 CSS 코드를 사용하세요 */
+
+.select-wrapper select:focus {
+  outline: none;
+  box-shadow: 0 0 3px #2196F3; /* 예시로 파란색 포커스 효과 사용 */
+}
+
+.select-wrapper select option {
+  font-size: 14px;
+}
+.out_checkbox_set {
+  width: 350px;
+    height: 300px;
+    background-color: white;
+    border-radius: 10px;
+    border: none;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.out_checkbox_set::-webkit-scrollbar {
+  width: 5px;
+}
+
+.out_checkbox_set::-webkit-scrollbar-track {
+  background: #ddd;
+}
+
+.out_checkbox_set::-webkit-scrollbar-thumb {
+  background: #666;
+}
+.checkbox_label{
+  font-weight: bold;
+}
+#admin_set{
+  display: none;
+  position: absolute;
+}
+.scroll{
+  overflow-x: scroll;
+
+}

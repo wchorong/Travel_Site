@@ -12,6 +12,21 @@
 <body>
 {% include "list_make_bar.html" %}
 <h1 style="text-align: center;">리스트 작성</h1>
+{% if error %}
+<div style="color: red; width: 100%; justify-content: center; align-items: center; display: flex">
+<div style="border: 2px black solid; width: 400px; text-align: center; border-radius: 10px">
+    {% for errors in error %}
+        <div style="width: 100%; justify-content: center; align-items: center; display: flex">
+        {% for error in errors %}
+            <div style="margin: 5px">
+    <span>{{ error }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
 <form method=POST  name="review_form" id="review_form" action="{% url 'summer_spot:post_list_retouch' pk pk2%}" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mb-3 container">

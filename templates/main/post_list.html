@@ -32,7 +32,7 @@
         <h1 class="logo"><a href="{% url 'summer_spot:post' pk %}">뒤로 가기</a></h1>
 
         <button class="loginBtn" onclick="location.href='{% url 'user_set:login' %}'"><i class="bi bi-box-arrow-in-right" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Login</a></button>
-        <button class="registerBtn" onclick="location.href='./register.html'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Register</a></button>
+     <button class="registerBtn" onclick="location.href='{% url 'user_set:user_retouch' %}'"><i class="bi bi-person-add" style="color: white; font-weight: bold; margin-right: 8px;"></i><a>Edit</a></button>
     </header>
 <div class="container" style="padding-top: 30px; padding-bottom: 60px">
 <span style="text-align: center; font-size: 100px; font-weight: bold;color:white">{{ post_list.get_division_display }}</span></div>
@@ -66,10 +66,14 @@
         </div>
         </div>
 </div>
+{% if user_check == 1 %}
 <div class="out_centered">
-    <button class="custom-btn btn-6" onclick="location.href='{% url 'summer_spot:post_list_retouch' pk=pk pk2=post_list.id %}'">
+    <button style="margin-right: 10px" class="custom-btn btn-6" onclick="location.href='{% url 'summer_spot:post_list_retouch' pk=pk pk2=post_list.id %}'">
     <span>수정</span></button>
+    <button style="margin-left: 10px" class="custom-btn btn-6"onclick="location.href='{% url 'summer_spot:post_list_del' pk=pk pk2=post_list.id %}'">
+    <span>삭제</span></button>
 </div>
+{% endif %}
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	fe7ad61fd61d620b72278f6765994dc2&libraries=services"></script>
 <script  type="text/javascript" src="{% static '/js/post_map.js' %}"></script>

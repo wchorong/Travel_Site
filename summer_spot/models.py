@@ -6,7 +6,7 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.conf import settings
 
-from user_set.models import User, User_Categories
+from user_set.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 class BaseModel(models.Model): # 베이스 모델
@@ -17,8 +17,8 @@ class BaseModel(models.Model): # 베이스 모델
 
 class Review(BaseModel): # 댓글
     comment = models.CharField(max_length=100, blank=True)
-    like = models.IntegerField(validators=[MinValueValidator(0),
-                                       MaxValueValidator(5)], default=0)
+    like = models.FloatField(validators=[MinValueValidator(0),
+                                       MaxValueValidator(5)], default=0.0)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
 
 class Many_image(BaseModel): # 피드용 이미지
@@ -71,36 +71,50 @@ class Post(BaseModel): # 피드
     user_check = models.IntegerField(default=0) # 조회수
     post_review = models.ManyToManyField(Review, blank=True, related_name="post_review") # 댓글 및 평점
     post_image = models.ManyToManyField(Many_image, blank=True, related_name="post_image") # 피드 내 이미지
-    content = models.CharField(max_length=500) # 설명
-    title = models.CharField(max_length=30) # 피드 제목
+    content = models.CharField(max_length=1000) # 설명
+    title = models.CharField(max_length=100) # 피드 제목
     post_list = models.ManyToManyField(Post_list, blank=True, related_name="post_list")
-
-    AMBIENCE = (
+    number = models.CharField(max_length=30, blank=True)
+    sub_title = models.CharField(max_length=500, blank=True)
+    MOOD = (
         ('1', '신선한'),
-        ('2', '조용한'),
-        ('3', '왁자지껄한'),)
-    ambience = models.CharField(verbose_name='분위기', max_length=1, choices=AMBIENCE, blank=True)
+        ('2', '자연적인'),
+        ('3', '사진 찍기 좋은'),
+        ('4', '조용한'),
+        ('5', '멋진'),
+        ('6', '왁자지껄한'),
+        ('7', '사람이 적은'),
+        ('8', '새로운'),
+        ('9', '호화로운'),
+        ('10', '야경이 멋진'),
+        ('11', '고즈넉한'),)
+    mood = models.CharField(verbose_name='분위기', max_length=2, choices=MOOD, blank=True)
     PERSONNEL = (
-        ('1', '혼자'),
-        ('2', '둘이'),
-        ('3', '셋이'),
-        ('4', '여러 명이'),)
-    personnel = models.CharField(verbose_name='인원', max_length=1, choices=PERSONNEL, blank=True)
-    VIEW = (
-        ('1', '자연적인'),
-        ('2', '사진 찍기 좋은'),)
-    view = models.CharField(verbose_name='풍경', max_length=1, choices=VIEW, blank=True)
-    GOOD_PLACE = (
+        ('1', '1인 여행'),
+        ('2', '2인 여행'),
+        ('3', '3인 여행'),
+        ('4', '4인 여행'),
+        ('5', '5인 여행'),
+        ('6', '단체 여행'),)
+    personnel = models.CharField(verbose_name='여행 인원', max_length=1, choices=PERSONNEL, blank=True)
+    LEISURE = (
         ('1', '빠지'),
-        ('2', '맛집이 많은'),
-        ('3', '물놀이'),
-        ('4', '다이빙 장소'),)
-    good_place = models.CharField(verbose_name='놀 거리', max_length=1, choices=GOOD_PLACE, blank=True)
+        ('2', '다이빙'),
+        ('3', '스쿠버'),
+        ('4', '캠핑'),
+        ('5', '해변 활동'),
+        ('6', '서핑'),
+        ('7', '수영'),
+        ('8', '모터보트'),)
+    leisure = models.CharField(verbose_name='놀거리', max_length=1, choices=LEISURE, blank=True)
     RENTAL_ITEM = (
         ('1', '수영복'),
         ('2', '튜브'),
         ('3', '오리발'),
-        ('4', '매트'),)
+        ('4', '파라솔'),
+        ('5', '돗자리(매트)'),
+        ('6', '서핑 보드'),
+        ('7', '비치 베드'),)
     rental_item = models.CharField(verbose_name='대여 물품', max_length=1, choices=RENTAL_ITEM, blank=True)
 
     def save(self, *args, **kwargs):
