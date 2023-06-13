@@ -227,7 +227,7 @@ class Weather(APIView): # 날씨
         # response = requests.get(url, headers=headers)
         # uv_data = response.json()
         # uv, uv_max = int(uv_data['result']['uv']), int(uv_data['result']['uv_max'])
-        uv, uv_max = 0, 8
+        uv, uv_max = 2, 8
         now = datetime.now().time().hour
         weather = weather.lower()
         if weather == 'clear':
@@ -278,7 +278,6 @@ class Many_image(APIView): # 피드용 이미지
         images = Many_image_Serializer(data=request.data)
         if images.is_valid():
             check_image = images.save()
-            print(check_image)
             post = Post.objects.get(id=pk)
             post.post_image.add(check_image)
             post.save()

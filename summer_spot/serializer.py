@@ -69,7 +69,6 @@ class Review_Serializer(serializers.ModelSerializer):
                                      user=users,
                                      like=like,
                                      )
-        print(like)
         return bool
 
 

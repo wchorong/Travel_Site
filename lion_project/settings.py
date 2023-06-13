@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-x63xy%&+at7_#f9borz#f#oawdo*wt_5oag7-y9%^a=wshkz(2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.39.141.56']
+ALLOWED_HOSTS = ['ec2-3-39-141-56.ap-northeast-2.compute.amazonaws.com']
 WEATHER_API_KEY = 'bfa0a81dd788fcb9a6231d1e294cf611'
 UVI_API_KEY = 'openuv-15n2nerli5prh3g-io'
 
